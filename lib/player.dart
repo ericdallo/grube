@@ -5,51 +5,42 @@ import 'package:grube/game_controller.dart';
 import 'package:grube/character.dart';
 
 class Player extends Character {
-  double dx = 0;
-  double dy = 0;
 
-  Player.from(GameController gameController, Map<String, dynamic> json)
+  Player.from(GameController gameController, Size worldSize, Map<String, dynamic> json)
       : super(
           gameController,
+          worldSize: worldSize,
           json: json,
           color: Color(json['color']),
         );
 
   @override
-  void update(double t) {
-    double x = speed * t * dx;
-    double y = speed * t * dy;
-
-    if (rect.left + x <= 0) {
-      x = -rect.left;
-    }
-
-    if (rect.right + x >= gameController.screenSize.width) {
-      x = gameController.screenSize.width - rect.right;
-    }
-
-    if (rect.top + y <= 0) {
-      y = -rect.top;
-    }
-
-    if (rect.bottom + y >= gameController.screenSize.height) {
-      y = gameController.screenSize.height - rect.bottom;
-    }
-
-    rect = rect.translate(x, y);
-  }
+  void update(double t) {}
 
   void move(DragUpdateDetails details) {
-    if (details.delta.dx >= 0) {
-      dx = min(details.delta.dx, maxSpeed);
-    } else {
-      dx = max(details.delta.dx, -maxSpeed);
+    var dx = details.delta.dx;
+    var dy = details.delta.dy;
+
+    bool canMoveRight = rect.right + xStep <= gameController.screenSize.width + 1;
+    bool canMoveLeft = rect.left - xStep >= -1;
+    bool canMoveDown = rect.bottom + yStep <= gameController.screenSize.height + 1;
+    bool canMoveUp = rect.top - yStep >= -1;
+
+    if (dx > 0 && canMoveRight) {
+      rect = rect.translate(xStep, 0);
     }
 
-    if (details.delta.dy >= 0) {
-      dy = min(details.delta.dy, maxSpeed);
-    } else {
-      dy = max(details.delta.dy, -maxSpeed);
+    if (dx < 0 && canMoveLeft) {
+      rect = rect.translate(-xStep, 0);
     }
+
+    if (dy > 0 && canMoveDown) {
+      rect = rect.translate(0, yStep);
+    }
+
+    if (dy < 0 && canMoveUp) {
+      rect = rect.translate(0, -yStep);
+    }
+    gameController.playerMoved(rect.left / rect.size.width, rect.top / rect.size.height);
   }
 }

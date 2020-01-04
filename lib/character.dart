@@ -3,21 +3,26 @@ import 'package:grube/game_controller.dart';
 
 abstract class Character {
   final GameController gameController;
-  final double maxSpeed = 3;
 
   Rect rect;
   Paint paint;
-  double speed;
+  double xStep;
+  double yStep;
 
-  Character(this.gameController, {@required Map<String, dynamic> json, @required Color color}) {
-    this.speed = gameController.tileSize * json['speed'];
-    final size = gameController.tileSize * json['size'];
+  Character(this.gameController,
+      {@required Size worldSize,
+      @required Map<String, dynamic> json,
+      @required Color color}) {
+    final width = gameController.screenSize.width / worldSize.width;
+    final height = gameController.screenSize.height / worldSize.height;
     rect = Rect.fromLTWH(
-      json['position']['x'],
-      json['position']['y'],
-      size,
-      size,
+      json['position']['x'] * width,
+      json['position']['y'] * height,
+      width,
+      height,
     );
+    this.xStep = json['step'];
+    this.yStep = json['step'];
     paint = Paint()..color = color;
   }
 

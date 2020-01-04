@@ -4,26 +4,29 @@ import 'dart:ui';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
+import 'package:grube/aspect_ratio.dart';
 import 'package:grube/game_data.dart';
 import 'package:grube/socket_manager.dart';
 
 class GameController extends Game {
   SocketManager socketManager;
-  GameData gameData;
+  World world;
 
   Size screenSize;
-  double tileSize;
+  AspectRatio aspectRatio;
 
   Random random;
+
+  bool canMove;
 
   GameController() {
     initialize();
   }
 
   void initialize() async {
-    socketManager = SocketManager(this);
-
     resize(await Flame.util.initialDimensions());
+
+    socketManager = SocketManager(this);
   }
 
   @override
@@ -32,31 +35,46 @@ class GameController extends Game {
     Paint backgroundPaint = Paint()..color = Color(0xFFFAFAFA);
     c.drawRect(background, backgroundPaint);
 
-    if (gameData != null) {
-      gameData.enemies.forEach((enemyId, enemy) => enemy.render(c));
-      gameData.player.render(c);
+    if (world != null) {
+      world.enemies.forEach((enemyId, enemy) => enemy.render(c));
+      world.player.render(c);
     }
   }
 
   @override
   void update(double t) {
-    if (gameData != null) {
-      gameData.enemies.forEach((enemyId, enemy) => enemy.update(t));
-      gameData.player.update(t);
+    if (world != null) {
+      world.enemies.forEach((enemyId, enemy) => enemy.update(t));
+      world.player.update(t);
     }
   }
 
   @override
   void resize(Size size) {
-    screenSize = size;
-    tileSize = screenSize.width / 10;
+    this.screenSize = size;
+    this.aspectRatio = AspectRatio(size);
   }
 
-  void onPanUpdate(DragUpdateDetails details) {
-    gameData.player.move(details);
+  void onWorldUpdate(World world) async {
+    this.world = world;
   }
 
-  void onGameUpdate(GameData gameData) {
-    this.gameData = gameData;
+  void onDragStart(DragStartDetails details) {
+    this.canMove = true;
+  }
+
+  void onDragUpdate(DragUpdateDetails details) {
+    if (canMove) {
+      world.player.move(details);
+    }
+    this.canMove = false;
+  }
+
+  void onDragEnd(DragEndDetails details) {
+    this.canMove = true;
+  }
+
+  void playerMoved(double x, double y) async {
+    this.socketManager.send("move-player", {'x': x, 'y': y});
   }
 }
