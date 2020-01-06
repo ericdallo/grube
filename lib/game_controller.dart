@@ -3,8 +3,10 @@ import 'dart:ui';
 
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
-import 'package:grube/aspect_ratio.dart';
+import 'package:grube/direction.dart';
+import 'package:grube/enums.dart';
 import 'package:grube/game_data.dart';
 import 'package:grube/socket_manager.dart';
 
@@ -13,7 +15,6 @@ class GameController extends Game {
   World world;
 
   Size screenSize;
-  AspectRatio aspectRatio;
 
   Random random;
 
@@ -38,6 +39,9 @@ class GameController extends Game {
     if (world != null) {
       world.enemies.forEach((enemyId, enemy) => enemy.render(c));
       world.player.render(c);
+      world.bullets.forEach((playerId, bullets) {
+        bullets.forEach((bullet) => bullet.render(c));
+      });
     }
   }
 
@@ -52,11 +56,16 @@ class GameController extends Game {
   @override
   void resize(Size size) {
     this.screenSize = size;
-    this.aspectRatio = AspectRatio(size);
   }
 
-  void onWorldUpdate(World world) async {
+  void onWorldUpdate(World world) {
     this.world = world;
+  }
+
+  void onDoubleTap() {
+    if (world != null) {
+      world.player.shoot();
+    }
   }
 
   void onDragStart(DragStartDetails details) {
@@ -65,7 +74,7 @@ class GameController extends Game {
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canMove) {
-      world.player.move(details);
+      world.player.move(_toDirection(details));
     }
     this.canMove = false;
   }
@@ -74,7 +83,35 @@ class GameController extends Game {
     this.canMove = true;
   }
 
-  void playerMoved(double x, double y) async {
-    this.socketManager.send("move-player", {'x': x, 'y': y});
+  void playerMoved(Direction direction, Position position) async {
+    this.socketManager.send("move-player", {
+      'direction': Enums.parse(direction),
+      'x': position.x,
+      'y': position.y
+    });
+  }
+
+  void playerShot(Direction direction, Position position) async {
+    this.socketManager.send("player-shoot", {
+      'direction': Enums.parse(direction),
+      'x': position.x,
+      'y': position.y,
+    });
+  }
+
+  Direction _toDirection(DragUpdateDetails details) {
+    if (details.delta.dx > 0) {
+      return Direction.right;
+    }
+
+    if (details.delta.dx < 0) {
+      return Direction.left;
+    }
+
+    if (details.delta.dy > 0) {
+      return Direction.down;
+    }
+
+    return Direction.up;
   }
 }

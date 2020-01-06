@@ -12,8 +12,13 @@ void main() async {
   await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
   GameController gameController = GameController();
+
+  DoubleTapGestureRecognizer doubleTap = DoubleTapGestureRecognizer();
+
   HorizontalDragGestureRecognizer horizontal = HorizontalDragGestureRecognizer();
   VerticalDragGestureRecognizer vertical = VerticalDragGestureRecognizer();
+
+  doubleTap.onDoubleTap = gameController.onDoubleTap;
   horizontal.onStart = gameController.onDragStart;
   horizontal.onUpdate = gameController.onDragUpdate;
   horizontal.onEnd = gameController.onDragEnd;
@@ -25,4 +30,5 @@ void main() async {
   runApp(gameController.widget);
   flameUtil.addGestureRecognizer(horizontal);
   flameUtil.addGestureRecognizer(vertical);
+  flameUtil.addGestureRecognizer(doubleTap);
 }

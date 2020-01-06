@@ -13,6 +13,4 @@ class Enemy extends Character {
           color: Color(0xFF999999),
         );
 
-  @override
-  void update(double t) {}
 }

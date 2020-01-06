@@ -1,12 +1,14 @@
 import 'dart:math';
 
+import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:grube/direction.dart';
 import 'package:grube/game_controller.dart';
 import 'package:grube/character.dart';
 
 class Player extends Character {
-
-  Player.from(GameController gameController, Size worldSize, Map<String, dynamic> json)
+  Player.from(
+      GameController gameController, Size worldSize, Map<String, dynamic> json)
       : super(
           gameController,
           worldSize: worldSize,
@@ -14,33 +16,56 @@ class Player extends Character {
           color: Color(json['color']),
         );
 
-  @override
-  void update(double t) {}
+  void move(Direction direction) {
+    bool teleportRight = position.x + 1 >= gameController.world.size.width;
+    bool teleportLeft = position.x <= 0;
+    bool teleportDown = position.y + 1 >= gameController.world.size.height;
+    bool teleportUp = position.y <= 0;
 
-  void move(DragUpdateDetails details) {
-    var dx = details.delta.dx;
-    var dy = details.delta.dy;
-
-    bool canMoveRight = rect.right + xStep <= gameController.screenSize.width + 1;
-    bool canMoveLeft = rect.left - xStep >= -1;
-    bool canMoveDown = rect.bottom + yStep <= gameController.screenSize.height + 1;
-    bool canMoveUp = rect.top - yStep >= -1;
-
-    if (dx > 0 && canMoveRight) {
-      rect = rect.translate(xStep, 0);
+    if (direction == Direction.right) {
+      position.x = teleportRight ? 0 : position.x + 1;
     }
 
-    if (dx < 0 && canMoveLeft) {
-      rect = rect.translate(-xStep, 0);
+    if (direction == Direction.left) {
+      position.x =
+          teleportLeft ? gameController.world.size.width - 1 : position.x - 1;
     }
 
-    if (dy > 0 && canMoveDown) {
-      rect = rect.translate(0, yStep);
+    if (direction == Direction.down) {
+      position.y = teleportDown ? 0 : position.y + 1;
     }
 
-    if (dy < 0 && canMoveUp) {
-      rect = rect.translate(0, -yStep);
+    if (direction == Direction.up) {
+      position.y =
+          teleportUp ? gameController.world.size.height - 1 : position.y - 1;
     }
-    gameController.playerMoved(rect.left / rect.size.width, rect.top / rect.size.height);
+
+    this.direction = direction;
+    gameController.playerMoved(direction, position);
+  }
+
+  void shoot() {
+    double x, y;
+    if (direction == Direction.right) {
+      x = position.x + 1;
+      y = position.y;
+    }
+
+    if (direction == Direction.left) {
+      x = position.x - 1;
+      y = position.y;
+    }
+
+    if (direction == Direction.down) {
+      x = position.x;
+      y = position.y + 1;
+    }
+
+    if (direction == Direction.up) {
+      x = position.x;
+      y = position.y - 1;
+    }
+
+    gameController.playerShot(direction, Position(x, y));
   }
 }

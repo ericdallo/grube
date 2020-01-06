@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:grube/game_controller.dart';
 import 'package:grube/player.dart';
 import 'package:grube/enemy.dart';
+import 'package:grube/bullet.dart';
 
 class World {
   Size size;
   Player player;
   Map<String, Enemy> enemies;
+  Map<String, List<Bullet>> bullets;
 
   World.from(
     GameController gameController,
@@ -21,5 +23,12 @@ class World {
         .map((enemyId, enemy) =>
             MapEntry(enemyId, Enemy.from(gameController, size, enemy)))
         .cast<String, Enemy>();
+
+    this.bullets = json['bullets'].map((playerId, bulletsJson) {
+      List<Bullet> bullets =
+          bulletsJson.map((bullet) => Bullet.from(gameController, size, bullet)).toList().cast<Bullet>();
+
+      return MapEntry(playerId, bullets);
+    }).cast<String, List<Bullet>>();
   }
 }
