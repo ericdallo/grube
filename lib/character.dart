@@ -23,7 +23,7 @@ abstract class Character {
       @required Map<String, dynamic> json,
       @required Color color}) {
     this.bullets = json['bullets']
-        .map((bullet) => Bullet.from(gameController, worldSize, bullet))
+        .map((bullet) => Bullet.from(gameController, worldSize, color, bullet))
         .toList()
         .cast<Bullet>();
     this.position = Position(json['position']['x'], json['position']['y']);

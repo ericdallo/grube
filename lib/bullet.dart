@@ -13,11 +13,11 @@ class Bullet {
   double _radius;
   Offset _offset;
 
-  Bullet.from(GameController gameController, Size worldSize, Map<String, dynamic> json) {
+  Bullet.from(GameController gameController, Size worldSize, Color color, Map<String, dynamic> json) {
     this.direction = Enums.fromString(Direction.values, json['direction']);
     this.position = Position(json['position']['x'], json['position']['y']);
 
-    this._paint = Paint()..color = Color(0xFFE74C3C);
+    this._paint = Paint()..color = color;
     this._radius = 8.0;
     final width = gameController.screenSize.width / worldSize.width;
     final height = gameController.screenSize.height / worldSize.height;
