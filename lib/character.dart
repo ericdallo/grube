@@ -1,11 +1,13 @@
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:grube/bullet.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/enums.dart';
 import 'package:grube/game_controller.dart';
 
 abstract class Character {
   final GameController gameController;
+  List<Bullet> bullets;
 
   Size size;
   Position position;
@@ -20,6 +22,10 @@ abstract class Character {
       {@required Size worldSize,
       @required Map<String, dynamic> json,
       @required Color color}) {
+    this.bullets = json['bullets']
+        .map((bullet) => Bullet.from(gameController, worldSize, bullet))
+        .toList()
+        .cast<Bullet>();
     this.position = Position(json['position']['x'], json['position']['y']);
     this.direction = Enums.fromString(Direction.values, json['direction']);
 
@@ -48,5 +54,6 @@ abstract class Character {
 
   void render(Canvas c) {
     c.drawRect(rect, paint);
+    this.bullets.forEach((bullet) => bullet.render(c));
   }
 }

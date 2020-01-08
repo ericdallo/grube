@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grube/direction.dart';

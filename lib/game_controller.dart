@@ -7,7 +7,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/enums.dart';
-import 'package:grube/game_data.dart';
+import 'package:grube/world.dart';
 import 'package:grube/socket_manager.dart';
 
 class GameController extends Game {
@@ -39,9 +39,6 @@ class GameController extends Game {
     if (world != null) {
       world.enemies.forEach((enemyId, enemy) => enemy.render(c));
       world.player.render(c);
-      world.bullets.forEach((playerId, bullets) {
-        bullets.forEach((bullet) => bullet.render(c));
-      });
     }
   }
 
