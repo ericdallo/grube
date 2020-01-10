@@ -37,7 +37,7 @@ class GameController extends Game {
     c.drawRect(background, backgroundPaint);
 
     if (world != null) {
-      world.enemies.forEach((enemyId, enemy) => enemy.render(c));
+      world.enemies.forEach((enemy) => enemy.render(c));
       world.player.render(c);
     }
   }
@@ -45,7 +45,7 @@ class GameController extends Game {
   @override
   void update(double t) {
     if (world != null) {
-      world.enemies.forEach((enemyId, enemy) => enemy.update(t));
+      world.enemies.forEach((enemy) => enemy.update(t));
       world.player.update(t);
     }
   }

@@ -6,7 +6,7 @@ import 'package:grube/enemy.dart';
 class World {
   Size size;
   Player player;
-  Map<String, Enemy> enemies;
+  List<Enemy> enemies;
 
   World.from(
     GameController gameController,
@@ -14,12 +14,12 @@ class World {
     Map<String, dynamic> json,
   ) {
     this.size = Size(json['size']['width'], json['size']['height']);
-    this.player = Player.from(gameController, size, json['players'][playerId]);
-    var enemies = Map.from(json['players'])
-      ..removeWhere((k, v) => k == playerId);
-    this.enemies = enemies
-        .map((enemyId, enemy) =>
-            MapEntry(enemyId, Enemy.from(gameController, size, enemy)))
-        .cast<String, Enemy>();
+    var player =
+        json['players'].singleWhere((player) => player['id'] == playerId);
+    this.player = Player.from(gameController, size, player);
+    this.enemies = List.of(
+            json['players']..removeWhere((player) => player['id'] == playerId))
+          .map((enemy) => Enemy.from(gameController, size, enemy))
+          .toList();
   }
 }

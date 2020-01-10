@@ -1,6 +1,5 @@
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
-import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:grube/game_controller.dart';
 import 'package:grube/world.dart';
