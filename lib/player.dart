@@ -15,6 +15,10 @@ class Player extends Character {
         );
 
   void move(Direction direction) {
+    if (!live) {
+      return;
+    }
+
     bool teleportRight = position.x + 1 >= gameController.world.size.width;
     bool teleportLeft = position.x <= 0;
     bool teleportDown = position.y + 1 >= gameController.world.size.height;
@@ -43,6 +47,10 @@ class Player extends Character {
   }
 
   void shoot() {
+    if (!live) {
+      return;
+    }
+
     double x, y;
     if (direction == Direction.right) {
       x = position.x + 1;

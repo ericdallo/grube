@@ -12,11 +12,14 @@ abstract class Character {
   Size size;
   Position position;
   Direction direction;
+  int life;
 
   Rect rect;
   Paint paint;
   double xStep;
   double yStep;
+
+  bool get live => life > 0;
 
   Character(this.gameController,
       {@required Size worldSize,
@@ -28,6 +31,7 @@ abstract class Character {
         .cast<Bullet>();
     this.position = Position(json['position']['x'], json['position']['y']);
     this.direction = Enums.fromString(Direction.values, json['direction']);
+    this.life = json['life'];
 
     final width = gameController.screenSize.width / worldSize.width;
     final height = gameController.screenSize.height / worldSize.height;
@@ -49,11 +53,16 @@ abstract class Character {
   }
 
   void update(double t) {
-    _buildShape();
+    if (live) {
+      _buildShape();
+    }
   }
 
   void render(Canvas c) {
-    c.drawRect(rect, paint);
+    if (live) {
+      c.drawRect(rect, paint);
+    }
+
     this.bullets.forEach((bullet) => bullet.render(c));
   }
 }
