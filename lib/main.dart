@@ -2,8 +2,8 @@ import 'package:flame/util.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grube/config/secret.dart';
 import 'package:grube/game_controller.dart';
-import 'package:grube/socket_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,13 +11,15 @@ void main() async {
   await flameUtil.fullScreen();
   await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-  GameController gameController = GameController();
+  SecretManager.init();
 
   DoubleTapGestureRecognizer doubleTap = DoubleTapGestureRecognizer();
 
   HorizontalDragGestureRecognizer horizontal =
       HorizontalDragGestureRecognizer();
   VerticalDragGestureRecognizer vertical = VerticalDragGestureRecognizer();
+
+  GameController gameController = GameController();
 
   doubleTap.onDoubleTap = gameController.onDoubleTap;
   horizontal.onStart = gameController.onDragStart;

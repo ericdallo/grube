@@ -1,10 +1,9 @@
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:grube/config/secret.dart';
 import 'package:grube/game_controller.dart';
 import 'package:grube/world.dart';
-
-const String _WS_URL = "ws://192.168.0.16:8080/chsk?client-id=123";
 
 class SocketManager {
   GameController gameController;
@@ -16,7 +15,9 @@ class SocketManager {
   }
 
   void initialize() async {
-    channel = IOWebSocketChannel.connect(_WS_URL);
+    String wsURL = "${SecretManager.secrets.apiURL}/chsk?client-id=123";
+
+    channel = IOWebSocketChannel.connect(wsURL);
     channel.stream.listen(
       (message) {
         var json = jsonDecode(message.substring(1));

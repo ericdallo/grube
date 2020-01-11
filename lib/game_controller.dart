@@ -7,6 +7,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grube/direction.dart';
+import 'package:grube/config/secret.dart';
 import 'package:grube/texts/game_over.dart';
 import 'package:grube/enums.dart';
 import 'package:grube/world.dart';
