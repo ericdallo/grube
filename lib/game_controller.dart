@@ -5,7 +5,9 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:grube/direction.dart';
+import 'package:grube/texts/game_over.dart';
 import 'package:grube/enums.dart';
 import 'package:grube/world.dart';
 import 'package:grube/socket_manager.dart';
@@ -13,6 +15,7 @@ import 'package:grube/socket_manager.dart';
 class GameController extends BaseGame {
   SocketManager socketManager;
   World world;
+  GameOverText gameOverText;
 
   Size screenSize;
 
@@ -39,21 +42,28 @@ class GameController extends BaseGame {
     if (world != null) {
       world.enemies.forEach((enemy) => enemy.render(c));
       world.player.render(c);
+
+      if (!world.player.live) {
+        gameOverText.render(c);
+      }
     }
   }
 
   @override
   void update(double t) {
-    if (world != null) {
-      world.enemies.forEach((enemy) => enemy.update(t));
-      world.player.update(t);
+    if (world == null) {
+      return;
     }
+
+    world.enemies.forEach((enemy) => enemy.update(t));
+    world.player.update(t);
   }
 
   @override
   void resize(Size size) {
     super.resize(size);
     this.screenSize = size;
+    this.gameOverText = GameOverText(screenSize);
   }
 
   void onWorldUpdate(World world) {

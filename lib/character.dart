@@ -19,7 +19,7 @@ abstract class Character {
   double xStep;
   double yStep;
 
-  bool get live => life > 0;
+  bool get live => false;
 
   Character(this.gameController,
       {@required Size worldSize,

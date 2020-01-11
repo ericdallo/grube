@@ -15,7 +15,8 @@ void main() async {
 
   DoubleTapGestureRecognizer doubleTap = DoubleTapGestureRecognizer();
 
-  HorizontalDragGestureRecognizer horizontal = HorizontalDragGestureRecognizer();
+  HorizontalDragGestureRecognizer horizontal =
+      HorizontalDragGestureRecognizer();
   VerticalDragGestureRecognizer vertical = VerticalDragGestureRecognizer();
 
   doubleTap.onDoubleTap = gameController.onDoubleTap;

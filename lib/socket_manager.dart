@@ -4,7 +4,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:grube/game_controller.dart';
 import 'package:grube/world.dart';
 
-const String _WS_URL = "ws://192.168.1.231:8080/chsk?client-id=123";
+const String _WS_URL = "ws://192.168.0.16:8080/chsk?client-id=123";
 
 class SocketManager {
   GameController gameController;

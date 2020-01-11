@@ -19,7 +19,7 @@ class World {
     this.player = Player.from(gameController, size, player);
     this.enemies = List.of(
             json['players']..removeWhere((player) => player['id'] == playerId))
-          .map((enemy) => Enemy.from(gameController, size, enemy))
-          .toList();
+        .map((enemy) => Enemy.from(gameController, size, enemy))
+        .toList();
   }
 }
