@@ -10,7 +10,7 @@ import 'package:grube/enums.dart';
 import 'package:grube/world.dart';
 import 'package:grube/socket_manager.dart';
 
-class GameController extends Game {
+class GameController extends BaseGame {
   SocketManager socketManager;
   World world;
 
@@ -52,6 +52,7 @@ class GameController extends Game {
 
   @override
   void resize(Size size) {
+    super.resize(size);
     this.screenSize = size;
   }
 

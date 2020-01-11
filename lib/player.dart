@@ -1,18 +1,28 @@
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/game_controller.dart';
 import 'package:grube/character.dart';
+import 'package:grube/game_controller.dart';
+import 'package:grube/life.dart';
 
 class Player extends Character {
+  Lifes _lifes;
+
   Player.from(
       GameController gameController, Size worldSize, Map<String, dynamic> json)
-      : super(
+      : _lifes = Lifes(gameController, json['life']),
+        super(
           gameController,
           worldSize: worldSize,
           json: json,
           color: Color(json['color']),
         );
+
+  @override
+  void render(Canvas c) {
+    super.render(c);
+    _lifes.render(c);
+  }
 
   void move(Direction direction) {
     if (!live) {
