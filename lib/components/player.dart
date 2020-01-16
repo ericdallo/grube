@@ -1,10 +1,9 @@
-import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:grube/components/character.dart';
+import 'package:grube/components/life.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/character.dart';
-import 'package:grube/game_controller.dart';
-import 'package:grube/life.dart';
-import 'package:grube/world.dart';
+import 'package:grube/game/controller.dart';
+import 'package:grube/game/world.dart';
 
 class Player extends Character {
   Lifes _lifes;

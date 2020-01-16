@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
-import 'package:grube/game_controller.dart';
+import 'package:grube/game/controller.dart';
 
 const double _SIZE = 36;
 

@@ -1,8 +1,9 @@
-import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
-import 'package:web_socket_channel/web_socket_channel.dart';
+
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketManager {
   GameManager gameManager;

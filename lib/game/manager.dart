@@ -1,14 +1,14 @@
 import 'package:flame/position.dart';
+import 'package:flame/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flame/util.dart';
+import 'package:grube/components/enemy.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/enums.dart';
-import 'package:grube/enemy.dart';
-import 'package:grube/game_controller.dart';
-import 'package:grube/socket_manager.dart';
-import 'package:grube/world.dart';
+import 'package:grube/helpers/enums.dart';
+import 'package:grube/game/controller.dart';
+import 'package:grube/game/world.dart';
+import 'package:grube/socket/manager.dart';
 
 class GameManager {
   DoubleTapGestureRecognizer doubleTap;

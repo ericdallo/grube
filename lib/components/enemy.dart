@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:grube/game_controller.dart';
-import 'package:grube/character.dart';
+import 'package:grube/components/character.dart';
+import 'package:grube/game/controller.dart';
 
 class Enemy extends Character {
 

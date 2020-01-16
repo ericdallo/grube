@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/position.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/enums.dart';
-import 'package:grube/game_controller.dart';
+import 'package:grube/helpers/enums.dart';
+import 'package:grube/game/controller.dart';
 
 class Bullet {
   Direction direction;

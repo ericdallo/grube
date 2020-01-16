@@ -1,10 +1,9 @@
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:grube/game_controller.dart';
-import 'package:grube/player.dart';
-import 'package:grube/enemy.dart';
-
-import 'direction.dart';
+import 'package:grube/components/enemy.dart';
+import 'package:grube/components/player.dart';
+import 'package:grube/direction.dart';
+import 'package:grube/game/controller.dart';
 
 class World {
   World._();
@@ -68,5 +67,4 @@ class World {
           .forEach((enemy) => enemy.hit());
     });
   }
-
 }

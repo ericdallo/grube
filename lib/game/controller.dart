@@ -6,11 +6,11 @@ import 'package:flame/game.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:grube/components/text/game_over.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/texts/game_over.dart';
-import 'package:grube/enums.dart';
-import 'package:grube/world.dart';
 import 'package:grube/game/manager.dart';
+import 'package:grube/game/world.dart';
+import 'package:grube/helpers/enums.dart';
 
 class GameController extends BaseGame {
   GameManager gameManager;

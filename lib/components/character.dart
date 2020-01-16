@@ -1,10 +1,10 @@
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:grube/bullet.dart';
+import 'package:grube/components/bullet.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/enums.dart';
-import 'package:grube/game_controller.dart';
-import 'package:grube/world.dart';
+import 'package:grube/game/controller.dart';
+import 'package:grube/game/world.dart';
+import 'package:grube/helpers/enums.dart';
 
 abstract class Character {
   final GameController gameController;
