@@ -60,28 +60,7 @@ class Player extends Character {
       return;
     }
 
-    double x, y;
-    if (direction == Direction.right) {
-      x = position.x + 1;
-      y = position.y;
-    }
-
-    if (direction == Direction.left) {
-      x = position.x - 1;
-      y = position.y;
-    }
-
-    if (direction == Direction.down) {
-      x = position.x;
-      y = position.y + 1;
-    }
-
-    if (direction == Direction.up) {
-      x = position.x;
-      y = position.y - 1;
-    }
-
-    gameController.playerShot(direction, Position(x, y));
+    gameController.playerShot(direction, position);
   }
 
   void hit() {
