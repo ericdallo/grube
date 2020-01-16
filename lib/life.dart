@@ -30,6 +30,10 @@ class Lifes {
       c.save();
     });
   }
+
+  void hurt() {
+    this.lifes.removeLast();
+  }
 }
 
 class Life extends SpriteComponent {

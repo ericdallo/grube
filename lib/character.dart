@@ -4,11 +4,13 @@ import 'package:grube/bullet.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/enums.dart';
 import 'package:grube/game_controller.dart';
+import 'package:grube/world.dart';
 
 abstract class Character {
   final GameController gameController;
   List<Bullet> bullets;
 
+  String id;
   Size size;
   Position position;
   Direction direction;
@@ -22,19 +24,20 @@ abstract class Character {
   bool get live => life > 0;
 
   Character(this.gameController,
-      {@required Size worldSize,
-      @required Map<String, dynamic> json,
-      @required Color color}) {
+      {@required Map<String, dynamic> json, @required Color color}) {
+    final width = gameController.screenSize.width / World.instance.size.width;
+    final height =
+        gameController.screenSize.height / World.instance.size.height;
+
+    this.id = json['id'];
     this.bullets = json['bullets']
-        .map((bullet) => Bullet.from(gameController, worldSize, color, bullet))
+        .map((bullet) =>
+            Bullet.from(gameController, width, height, color, bullet))
         .toList()
         .cast<Bullet>();
     this.position = Position(json['position']['x'], json['position']['y']);
     this.direction = Enums.fromString(Direction.values, json['direction']);
     this.life = json['life'];
-
-    final width = gameController.screenSize.width / worldSize.width;
-    final height = gameController.screenSize.height / worldSize.height;
 
     this.size = Size(width, height);
     this.xStep = json['step'] * width;
@@ -64,5 +67,21 @@ abstract class Character {
     }
 
     this.bullets.forEach((bullet) => bullet.render(c));
+  }
+
+  void moveBullets(List<dynamic> bulletsJson) {
+    this.bullets = bulletsJson
+        .map((bullet) => Bullet.from(
+              gameController,
+              size.width,
+              size.height,
+              paint.color,
+              bullet,
+            ))
+        .toList();
+  }
+
+  void hit() {
+    life--;
   }
 }

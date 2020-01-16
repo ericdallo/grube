@@ -7,15 +7,13 @@ import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/config/secret.dart';
 import 'package:grube/texts/game_over.dart';
 import 'package:grube/enums.dart';
 import 'package:grube/world.dart';
-import 'package:grube/socket_manager.dart';
+import 'package:grube/game/manager.dart';
 
 class GameController extends BaseGame {
-  SocketManager socketManager;
-  World world;
+  GameManager gameManager;
   GameOverText gameOverText;
 
   Size screenSize;
@@ -24,14 +22,12 @@ class GameController extends BaseGame {
 
   bool canMove;
 
-  GameController() {
+  GameController(this.gameManager) {
     initialize();
   }
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
-
-    socketManager = SocketManager(this);
   }
 
   @override
@@ -40,21 +36,27 @@ class GameController extends BaseGame {
     Paint backgroundPaint = Paint()..color = Color(0xFFFAFAFA);
     c.drawRect(background, backgroundPaint);
 
-    if (world != null) {
-      world.enemies.forEach((enemy) => enemy.render(c));
-      world.player.render(c);
+    if (!gameManager.loaded) {
+      return;
+    }
 
-      if (!world.player.live) {
-        gameOverText.render(c);
-      }
+    var world = World.instance;
+
+    world.enemies.forEach((enemy) => enemy.render(c));
+    world.player.render(c);
+
+    if (!world.player.live) {
+      gameOverText.render(c);
     }
   }
 
   @override
   void update(double t) {
-    if (world == null) {
+    if (!gameManager.loaded) {
       return;
     }
+
+    var world = World.instance;
 
     world.enemies.forEach((enemy) => enemy.update(t));
     world.player.update(t);
@@ -67,14 +69,11 @@ class GameController extends BaseGame {
     this.gameOverText = GameOverText(screenSize);
   }
 
-  void onWorldUpdate(World world) {
-    this.world = world;
-  }
-
   void onDoubleTap() {
-    if (world != null) {
-      world.player.shoot();
+    if (!gameManager.loaded) {
+      return;
     }
+    World.instance.player.shoot();
   }
 
   void onDragStart(DragStartDetails details) {
@@ -82,8 +81,8 @@ class GameController extends BaseGame {
   }
 
   void onDragUpdate(DragUpdateDetails details) {
-    if (canMove) {
-      world.player.move(_toDirection(details));
+    if (canMove && gameManager.loaded) {
+      World.instance.player.move(_toDirection(details));
     }
     this.canMove = false;
   }
@@ -93,7 +92,7 @@ class GameController extends BaseGame {
   }
 
   void playerMoved(Direction direction, Position position) async {
-    this.socketManager.send("move-player", {
+    this.gameManager.socketManager.send("move-player", {
       'direction': Enums.parse(direction),
       'x': position.x,
       'y': position.y
@@ -101,7 +100,7 @@ class GameController extends BaseGame {
   }
 
   void playerShot(Direction direction, Position position) async {
-    this.socketManager.send("player-shoot", {
+    this.gameManager.socketManager.send("player-shoot", {
       'direction': Enums.parse(direction),
       'x': position.x,
       'y': position.y,

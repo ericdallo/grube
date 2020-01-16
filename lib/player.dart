@@ -4,16 +4,15 @@ import 'package:grube/direction.dart';
 import 'package:grube/character.dart';
 import 'package:grube/game_controller.dart';
 import 'package:grube/life.dart';
+import 'package:grube/world.dart';
 
 class Player extends Character {
   Lifes _lifes;
 
-  Player.from(
-      GameController gameController, Size worldSize, Map<String, dynamic> json)
+  Player.from(GameController gameController, Map<String, dynamic> json)
       : _lifes = Lifes(gameController, json['life']),
         super(
           gameController,
-          worldSize: worldSize,
           json: json,
           color: Color(json['color']),
         );
@@ -29,9 +28,11 @@ class Player extends Character {
       return;
     }
 
-    bool teleportRight = position.x + 1 >= gameController.world.size.width;
+    var world = World.instance;
+
+    bool teleportRight = position.x + 1 >= world.size.width;
     bool teleportLeft = position.x <= 0;
-    bool teleportDown = position.y + 1 >= gameController.world.size.height;
+    bool teleportDown = position.y + 1 >= world.size.height;
     bool teleportUp = position.y <= 0;
 
     if (direction == Direction.right) {
@@ -39,8 +40,7 @@ class Player extends Character {
     }
 
     if (direction == Direction.left) {
-      position.x =
-          teleportLeft ? gameController.world.size.width - 1 : position.x - 1;
+      position.x = teleportLeft ? world.size.width - 1 : position.x - 1;
     }
 
     if (direction == Direction.down) {
@@ -48,8 +48,7 @@ class Player extends Character {
     }
 
     if (direction == Direction.up) {
-      position.y =
-          teleportUp ? gameController.world.size.height - 1 : position.y - 1;
+      position.y = teleportUp ? world.size.height - 1 : position.y - 1;
     }
 
     this.direction = direction;
@@ -83,5 +82,10 @@ class Player extends Character {
     }
 
     gameController.playerShot(direction, Position(x, y));
+  }
+
+  void hit() {
+    super.hit();
+    _lifes.hurt();
   }
 }
