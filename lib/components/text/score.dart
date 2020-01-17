@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components/text_box_component.dart';
+import 'package:flame/components/text_component.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
@@ -8,25 +9,27 @@ import 'package:flutter/material.dart';
 TextConfig regular = TextConfig(
   fontFamily: 'PressStart2P',
   color: BasicPalette.black.color,
-  fontSize: 40,
+  fontSize: 36,
+  textAlign: TextAlign.left,
 );
 
-class GameOverText extends TextBoxComponent {
+class ScoreText extends TextComponent {
 
-  GameOverText(Size size)
+  ScoreText(Size size)
       : super(
-          'GAME OVER',
+          '0',
           config: regular,
-          boxConfig: TextBoxConfig(
-            maxWidth: 200,
-          ),
         ) {
-    x = (size.width / 2) - (width / 2);
-    y = (size.height / 2) - height;
+    x = 8;
+    y = 8;
   }
 
   @override
   bool isHud() {
     return true;
+  }
+
+  void updateScore(int score) {
+    this.text = score.toString();
   }
 }

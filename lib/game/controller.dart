@@ -7,6 +7,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grube/components/text/game_over.dart';
+import 'package:grube/components/text/score.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/manager.dart';
 import 'package:grube/game/world.dart';
@@ -14,6 +15,7 @@ import 'package:grube/helpers/enums.dart';
 
 class GameController extends BaseGame {
   GameManager gameManager;
+  ScoreText scoreText;
   GameOverText gameOverText;
 
   Size screenSize;
@@ -48,6 +50,8 @@ class GameController extends BaseGame {
     if (!world.player.live) {
       gameOverText.render(c);
     }
+
+    scoreText.render(c);
   }
 
   @override
@@ -60,6 +64,8 @@ class GameController extends BaseGame {
 
     world.enemies.forEach((enemy) => enemy.update(t));
     world.player.update(t);
+
+    scoreText.updateScore(world.player.score);
   }
 
   @override
@@ -67,6 +73,7 @@ class GameController extends BaseGame {
     super.resize(size);
     this.screenSize = size;
     this.gameOverText = GameOverText(screenSize);
+    this.scoreText = ScoreText(screenSize);
   }
 
   void onDoubleTap() {
@@ -105,6 +112,10 @@ class GameController extends BaseGame {
       'x': position.x,
       'y': position.y,
     });
+  }
+
+  void scoreUpdated(int score) async {
+    scoreText.updateScore(score);
   }
 
   Direction _toDirection(DragUpdateDetails details) {

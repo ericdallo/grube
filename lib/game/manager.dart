@@ -101,6 +101,9 @@ class GameManager {
           List<String> playerIds = payload['player-ids'].cast<String>();
           World.instance.hitPlayers(playerIds);
           break;
+        case "game/player-scored":
+          World.instance.player.score = payload['score'];
+          break;
       }
     });
   }

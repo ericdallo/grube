@@ -7,9 +7,11 @@ import 'package:grube/game/world.dart';
 
 class Player extends Character {
   Lifes _lifes;
+  int score;
 
   Player.from(GameController gameController, Map<String, dynamic> json)
       : _lifes = Lifes(gameController, json['life']),
+        score = json['score'],
         super(
           gameController,
           json: json,
@@ -65,5 +67,10 @@ class Player extends Character {
   void hit() {
     super.hit();
     _lifes.hurt();
+  }
+
+  void updateScore(int score) {
+    this.score = score;
+    gameController.scoreUpdated(score);
   }
 }
