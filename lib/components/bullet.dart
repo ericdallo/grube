@@ -5,18 +5,20 @@ import 'package:grube/direction.dart';
 import 'package:grube/helpers/enums.dart';
 import 'package:grube/game/controller.dart';
 
+const double SMALL_SIZE = 8;
+const double BIG_SIZE = 16;
+
 class Bullet {
   Direction direction;
   Position position;
 
   Paint _paint;
-  double _radius;
-  Offset _offset;
+  RRect _rrect;
 
   Bullet.from(
     GameController gameController,
-    double width,
-    double height,
+    double playerWidth,
+    double playerHeight,
     Color color,
     Map<String, dynamic> json,
   ) {
@@ -24,17 +26,30 @@ class Bullet {
     this.position = Position(json['position']['x'], json['position']['y']);
 
     this._paint = Paint()..color = color;
-    this._radius = 8.0;
-    final centerPositionX = width / 2;
-    final centerPositionY = height / 2;
 
-    this._offset = Offset(
-      position.x * width + centerPositionX,
-      position.y * height + centerPositionY,
+    double width, height, centerX, centerY;
+    if (direction == Direction.right || direction == Direction.left) {
+      width = BIG_SIZE;
+      height = SMALL_SIZE;
+      centerX = playerWidth / 2 - (BIG_SIZE / 2);
+      centerY = playerHeight / 2 - (SMALL_SIZE / 2);
+    } else {
+      width = SMALL_SIZE;
+      height = BIG_SIZE;
+      centerX = playerWidth / 2 - (SMALL_SIZE / 2);
+      centerY = playerHeight / 2 - (BIG_SIZE / 2);
+    }
+
+    Rect rect = Rect.fromLTWH(
+      position.x * playerWidth + centerX,
+      position.y * playerHeight + centerY,
+      width,
+      height,
     );
+    _rrect = RRect.fromRectXY(rect, 2, 2);
   }
 
   void render(Canvas c) {
-    c.drawCircle(_offset, _radius, _paint);
+    c.drawRRect(_rrect, _paint);
   }
 }
