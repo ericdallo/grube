@@ -7,7 +7,6 @@ const double HURT_TIME = 0.2;
 
 class Hurt extends PositionComponent {
   final GameController gameController;
-  Rect _hurtRect;
   Paint _hurtPaint;
 
   bool _startAnimation = false;
@@ -15,20 +14,24 @@ class Hurt extends PositionComponent {
   double _timer = 0;
 
   Hurt(this.gameController) {
-    this._hurtRect = Rect.fromLTWH(
-      0,
-      0,
-      gameController.screenSize.width,
-      gameController.screenSize.height,
-    );
+    this.x = 0;
+    this.y = 0;
+    this.width = gameController.screenSize.width;
+    this.height = gameController.screenSize.height;
+
     this._hurtPaint = Paint()..color = Color(0xDDe74c3c);
     gameController.add(this);
   }
 
   @override
+  bool isHud() {
+    return true;
+  }
+
+  @override
   void render(Canvas c) {
     if (_show) {
-      c.drawRect(_hurtRect, _hurtPaint);
+      c.drawRect(toRect(), _hurtPaint);
     }
   }
 

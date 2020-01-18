@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:grube/components/character.dart';
 import 'package:grube/components/hurt.dart';
 import 'package:grube/components/life.dart';
+import 'package:grube/components/stamina.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/controller.dart';
 import 'package:grube/game/world.dart';
@@ -9,6 +10,7 @@ import 'package:grube/game/world.dart';
 class Player extends Character {
   Lifes _lifes;
   Hurt _hurt;
+  Stamina _stamina;
 
   int score;
 
@@ -19,21 +21,24 @@ class Player extends Character {
           color: Color(json['color']),
         ) {
     this._lifes = Lifes(gameController, json['life']);
-    this.score = json['score'];
     this._hurt = Hurt(gameController);
+    this._stamina = Stamina(gameController, json['stamina']);
+    this.score = json['score'];
   }
 
   @override
   void update(double t) {
     super.update(t);
     _hurt.update(t);
+    _stamina.update(t);
   }
 
   @override
   void render(Canvas c) {
     super.render(c);
-    _lifes.render(c);
     _hurt.render(c);
+    _lifes.render(c);
+    _stamina.render(c);
   }
 
   void move(Direction direction) {
@@ -73,7 +78,10 @@ class Player extends Character {
       return;
     }
 
-    gameController.playerShot(direction, position);
+    if (_stamina.isFull()) {
+      gameController.playerShot(direction, position);
+      _stamina.tire();
+    }
   }
 
   void hit() {
