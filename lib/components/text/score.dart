@@ -14,7 +14,6 @@ TextConfig regular = TextConfig(
 );
 
 class ScoreText extends TextComponent {
-
   ScoreText(Size size)
       : super(
           '0',
@@ -27,6 +26,13 @@ class ScoreText extends TextComponent {
   @override
   bool isHud() {
     return true;
+  }
+
+  @override
+  void render(Canvas c) {
+    c.save();
+    super.render(c);
+    c.restore();
   }
 
   void updateScore(int score) {

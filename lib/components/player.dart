@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:grube/components/character.dart';
+import 'package:grube/components/hurt.dart';
 import 'package:grube/components/life.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/controller.dart';
@@ -7,21 +8,32 @@ import 'package:grube/game/world.dart';
 
 class Player extends Character {
   Lifes _lifes;
+  Hurt _hurt;
+
   int score;
 
   Player.from(GameController gameController, Map<String, dynamic> json)
-      : _lifes = Lifes(gameController, json['life']),
-        score = json['score'],
-        super(
+      : super(
           gameController,
           json: json,
           color: Color(json['color']),
-        );
+        ) {
+    this._lifes = Lifes(gameController, json['life']);
+    this.score = json['score'];
+    this._hurt = Hurt(gameController);
+  }
+
+  @override
+  void update(double t) {
+    super.update(t);
+    _hurt.update(t);
+  }
 
   @override
   void render(Canvas c) {
     super.render(c);
     _lifes.render(c);
+    _hurt.render(c);
   }
 
   void move(Direction direction) {
@@ -67,6 +79,7 @@ class Player extends Character {
   void hit() {
     super.hit();
     _lifes.hurt();
+    _hurt.hurt();
   }
 
   void updateScore(int score) {
