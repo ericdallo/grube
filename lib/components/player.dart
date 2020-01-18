@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
+import 'package:flame/flame.dart';
 import 'package:grube/components/character.dart';
 import 'package:grube/components/hurt.dart';
 import 'package:grube/components/life.dart';
@@ -6,6 +8,7 @@ import 'package:grube/components/stamina.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/controller.dart';
 import 'package:grube/game/world.dart';
+import 'package:grube/helpers/audios.dart';
 
 class Player extends Character {
   Lifes _lifes;
@@ -21,7 +24,7 @@ class Player extends Character {
           color: Color(json['color']),
         ) {
     this._lifes = Lifes(gameController, json['life']);
-    this._hurt = Hurt(gameController);
+    this._hurt = Hurt.screenHurt(gameController);
     this._stamina = Stamina(gameController, json['stamina']);
     this.score = json['score'];
   }
@@ -79,6 +82,7 @@ class Player extends Character {
     }
 
     if (_stamina.isFull()) {
+      Flame.audio.play(Audios.shoot);
       gameController.playerShot(direction, position);
       _stamina.tire();
     }
@@ -88,10 +92,16 @@ class Player extends Character {
     super.hit();
     _lifes.hurt();
     _hurt.hurt();
+    if (live) {
+      Flame.audio.play(Audios.hurt);
+    } else {
+      Flame.audio.play(Audios.gameOver);
+    }
   }
 
-  void updateScore(int score) {
+  void scorePoint(int score) {
     this.score = score;
-    gameController.scoreUpdated(score);
+    Flame.audio.play(Audios.score);
   }
+
 }

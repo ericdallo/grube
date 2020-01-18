@@ -11,6 +11,7 @@ import 'package:grube/components/text/score.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/manager.dart';
 import 'package:grube/game/world.dart';
+import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
 
 class GameController extends BaseGame {
@@ -30,6 +31,8 @@ class GameController extends BaseGame {
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
+
+    Audios.instance.loadAll();
   }
 
   @override
@@ -112,10 +115,6 @@ class GameController extends BaseGame {
       'x': position.x,
       'y': position.y,
     });
-  }
-
-  void scoreUpdated(int score) async {
-    scoreText.updateScore(score);
   }
 
   Direction _toDirection(DragUpdateDetails details) {

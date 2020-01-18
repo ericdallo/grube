@@ -25,6 +25,10 @@ flutter:
     - assets/secrets.json
     - assets/images/full_life.png
     - assets/images/empty_life.png
+    - assets/audio/player_hurt.mp3
+    - assets/audio/game_over.mp3
+    - assets/audio/score.mp3
+    - assets/audio/shoot.mp3
 
   fonts:
      - family: PressStart2P

@@ -102,7 +102,7 @@ class GameManager {
           World.instance.hitPlayers(playerIds);
           break;
         case "game/player-scored":
-          World.instance.player.score = payload['score'];
+          World.instance.player.scorePoint(payload['score']);
           break;
       }
     });
