@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/position.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/helpers/enums.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
 
 const double SMALL_SIZE = 8;
 const double BIG_SIZE = 16;
@@ -16,7 +16,7 @@ class Bullet {
   RRect _rrect;
 
   Bullet.from(
-    GameController gameController,
+    Game game,
     double playerWidth,
     double playerHeight,
     Color color,

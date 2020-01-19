@@ -2,12 +2,12 @@ import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grube/components/bullet.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/enums.dart';
 
 abstract class Character {
-  final GameController gameController;
+  final Game game;
   List<Bullet> bullets;
 
   String id;
@@ -23,16 +23,16 @@ abstract class Character {
 
   bool get live => life > 0;
 
-  Character(this.gameController,
+  Character(this.game,
       {@required Map<String, dynamic> json, @required Color color}) {
-    final width = gameController.screenSize.width / World.instance.size.width;
+    final width = game.screenSize.width / World.instance.size.width;
     final height =
-        gameController.screenSize.height / World.instance.size.height;
+        game.screenSize.height / World.instance.size.height;
 
     this.id = json['id'];
     this.bullets = json['bullets']
         .map((bullet) =>
-            Bullet.from(gameController, width, height, color, bullet))
+            Bullet.from(game, width, height, color, bullet))
         .toList()
         .cast<Bullet>();
     this.position = Position(json['position']['x'], json['position']['y']);
@@ -72,7 +72,7 @@ abstract class Character {
   void moveBullets(List<dynamic> bulletsJson) {
     this.bullets = bulletsJson
         .map((bullet) => Bullet.from(
-              gameController,
+              game,
               size.width,
               size.height,
               paint.color,

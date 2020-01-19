@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:grube/components/enemy.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
 
 const double HURT_TIME = 0.2;
 
 class Hurt extends PositionComponent {
-  final GameController gameController;
+  final Game game;
   Enemy _enemy;
   Paint _hurtPaint;
 
@@ -15,22 +15,22 @@ class Hurt extends PositionComponent {
   bool _show = false;
   double _timer = 0;
 
-  Hurt.screenHurt(this.gameController) {
+  Hurt.screenHurt(this.game) {
     this.x = 0;
     this.y = 0;
-    this.width = gameController.screenSize.width;
-    this.height = gameController.screenSize.height;
+    this.width = game.screenSize.width;
+    this.height = game.screenSize.height;
 
     this._hurtPaint = Paint()..color = Color(0xDDe74c3c);
-    gameController.add(this);
+    game.add(this);
   }
 
-  Hurt.enemyHurt(this.gameController, Enemy enemy) {
+  Hurt.enemyHurt(this.game, Enemy enemy) {
     this._enemy = enemy;
     _updateFromEnemyPosition();
 
     this._hurtPaint = Paint()..color = Color(0xDDe74c3c);
-    gameController.add(this);
+    game.add(this);
   }
 
   @override
