@@ -66,6 +66,10 @@ class Game extends BaseGame {
     this.screenSize = size;
   }
 
+  void start() {
+    gameManager.start();
+  }
+
   void onDoubleTap() {
     if (!loaded) {
       return;
