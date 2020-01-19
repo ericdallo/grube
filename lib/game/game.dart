@@ -6,33 +6,30 @@ import 'package:flame/game.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:grube/components/text/game_over.dart';
-import 'package:grube/components/text/score.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/manager.dart';
+import 'package:grube/game/ui.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
 
-class GameController extends BaseGame {
+class Game extends BaseGame {
   GameManager gameManager;
-  ScoreText scoreText;
-  GameOverText gameOverText;
+  GameUI ui;
 
   Size screenSize;
 
   Random random;
 
   bool canMove;
+  bool loaded = false;
 
-  GameController(this.gameManager) {
+  Game(this.gameManager, this.ui) {
     initialize();
   }
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
-
-    Audios.instance.loadAll();
   }
 
   @override
@@ -41,7 +38,7 @@ class GameController extends BaseGame {
     Paint backgroundPaint = Paint()..color = Color(0xFFFAFAFA);
     c.drawRect(background, backgroundPaint);
 
-    if (!gameManager.loaded) {
+    if (!loaded) {
       return;
     }
 
@@ -49,17 +46,11 @@ class GameController extends BaseGame {
 
     world.enemies.forEach((enemy) => enemy.render(c));
     world.player.render(c);
-
-    if (!world.player.live) {
-      gameOverText.render(c);
-    }
-
-    scoreText.render(c);
   }
 
   @override
   void update(double t) {
-    if (!gameManager.loaded) {
+    if (!loaded) {
       return;
     }
 
@@ -67,20 +58,16 @@ class GameController extends BaseGame {
 
     world.enemies.forEach((enemy) => enemy.update(t));
     world.player.update(t);
-
-    scoreText.updateScore(world.player.score);
   }
 
   @override
   void resize(Size size) {
     super.resize(size);
     this.screenSize = size;
-    this.gameOverText = GameOverText(screenSize);
-    this.scoreText = ScoreText(screenSize);
   }
 
   void onDoubleTap() {
-    if (!gameManager.loaded) {
+    if (!loaded) {
       return;
     }
     World.instance.player.shoot();
@@ -91,7 +78,7 @@ class GameController extends BaseGame {
   }
 
   void onDragUpdate(DragUpdateDetails details) {
-    if (canMove && gameManager.loaded) {
+    if (canMove && loaded) {
       World.instance.player.move(_toDirection(details));
     }
     this.canMove = false;
@@ -109,7 +96,13 @@ class GameController extends BaseGame {
     });
   }
 
-  void playerShot(Direction direction, Position position) async {
+  void playerShot(
+    Direction direction,
+    Position position,
+    int staminaTime,
+  ) async {
+    ui.staminaTime(staminaTime);
+    Flame.audio.play(Audios.shoot);
     this.gameManager.socketManager.send("player-shoot", {
       'direction': Enums.parse(direction),
       'x': position.x,
@@ -117,6 +110,33 @@ class GameController extends BaseGame {
     });
   }
 
+  void staminaCharged() {
+    ui.staminaCharged();
+  }
+
+  void load(player, world) {
+    World.instance.load(this, player, world);
+    this.loaded = true;
+  }
+
+  void score(int score) async {
+    Flame.audio.play(Audios.score);
+    ui.score(score);
+  }
+
+  void playerHurted() {
+    var world = World.instance;
+    ui.life(world.player.life);
+
+    if (world.player.live) {
+      Flame.audio.play(Audios.hurt);
+    } else {
+      Flame.audio.play(Audios.gameOver);
+      ui.changeScreen(UIScreen.gameOver);
+    }
+  }
+
+  //TODO move to another class
   Direction _toDirection(DragUpdateDetails details) {
     if (details.delta.dx > 0) {
       return Direction.right;

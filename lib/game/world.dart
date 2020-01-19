@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:grube/components/enemy.dart';
 import 'package:grube/components/player.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
 
 class World {
   World._();
@@ -18,12 +18,12 @@ class World {
   Player player;
   List<Enemy> enemies = [];
 
-  void load(GameController gameController, player, world) {
+  void load(Game game, player, world) {
     this.size = Size(world['size']['width'], world['size']['height']);
-    this.player = Player.from(gameController, player);
+    this.player = Player.from(game, player);
     this.enemies =
         List.of(world['players']..removeWhere((p) => p['id'] == player['id']))
-            .map((enemy) => Enemy.from(gameController, enemy))
+            .map((enemy) => Enemy.from(game, enemy))
             .toList();
   }
 
@@ -57,11 +57,11 @@ class World {
 
   void hitPlayers(List<String> playerIds) {
     playerIds.forEach((playerId) {
-        if (playerId == player.id) {
-          player.hit();
-          return;
-        }
-       this
+      if (playerId == player.id) {
+        player.hit();
+        return;
+      }
+      this
           .enemies
           .where((enemy) => enemy.id == playerId)
           .forEach((enemy) => enemy.hit());

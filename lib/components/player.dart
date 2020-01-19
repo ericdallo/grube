@@ -1,38 +1,34 @@
 import 'dart:ui';
 
-import 'package:flame/flame.dart';
 import 'package:grube/components/character.dart';
 import 'package:grube/components/hurt.dart';
-import 'package:grube/components/life.dart';
-import 'package:grube/components/stamina.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
-import 'package:grube/helpers/audios.dart';
 
 class Player extends Character {
-  Lifes _lifes;
   Hurt _hurt;
-  Stamina _stamina;
+  _Stamina _stamina;
 
-  int score;
-
-  Player.from(GameController gameController, Map<String, dynamic> json)
+  Player.from(Game game, Map<String, dynamic> json)
       : super(
-          gameController,
+          game,
           json: json,
           color: Color(json['color']),
         ) {
-    this._lifes = Lifes(gameController, json['life']);
-    this._hurt = Hurt.screenHurt(gameController);
-    this._stamina = Stamina(gameController, json['stamina']);
-    this.score = json['score'];
+    this._hurt = Hurt.screenHurt(game);
+    this._stamina = _Stamina(game, json['stamina']);
   }
 
   @override
   void update(double t) {
     super.update(t);
     _hurt.update(t);
+
+    if (!_stamina.charging()) {
+      return;
+    }
+
     _stamina.update(t);
   }
 
@@ -40,8 +36,6 @@ class Player extends Character {
   void render(Canvas c) {
     super.render(c);
     _hurt.render(c);
-    _lifes.render(c);
-    _stamina.render(c);
   }
 
   void move(Direction direction) {
@@ -73,35 +67,50 @@ class Player extends Character {
     }
 
     this.direction = direction;
-    gameController.playerMoved(direction, position);
+    game.playerMoved(direction, position);
   }
 
   void shoot() {
-    if (!live) {
+    if (!live || _stamina.charging()) {
       return;
     }
 
-    if (_stamina.isFull()) {
-      Flame.audio.play(Audios.shoot);
-      gameController.playerShot(direction, position);
-      _stamina.tire();
-    }
+    _stamina.tire();
+    game.playerShot(direction, position, _stamina.refuelTime());
   }
 
   void hit() {
     super.hit();
-    _lifes.hurt();
     _hurt.hurt();
-    if (live) {
-      Flame.audio.play(Audios.hurt);
-    } else {
-      Flame.audio.play(Audios.gameOver);
+    game.playerHurted();
+  }
+}
+
+class _Stamina {
+  final Game game;
+  double _timer = 0;
+  bool _charging = false;
+  int _refuelTime;
+
+  _Stamina(this.game, int stamina) {
+    this._refuelTime = stamina * 100;
+  }
+
+  bool charging() => _charging;
+  int refuelTime() => _refuelTime;
+
+  void update(double t) {
+    _timer += t * 1000;
+
+    if (_timer >= _refuelTime) {
+      _charging = false;
+      _timer = 0;
+      game.staminaCharged();
     }
   }
 
-  void scorePoint(int score) {
-    this.score = score;
-    Flame.audio.play(Audios.score);
+  void tire() {
+    _charging = true;
   }
 
 }

@@ -1,13 +1,15 @@
 import 'package:flame/position.dart';
 import 'package:flame/util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:grube/components/enemy.dart';
+import 'package:grube/config/secret.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/helpers/enums.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
+import 'package:grube/game/ui.dart';
 import 'package:grube/game/world.dart';
+import 'package:grube/helpers/audios.dart';
+import 'package:grube/helpers/enums.dart';
 import 'package:grube/socket/manager.dart';
 
 class GameManager {
@@ -17,17 +19,23 @@ class GameManager {
   Util flameUtil;
 
   String playerId;
-  bool loaded = false;
 
-  GameController gameController;
+  GameUI gameUI;
+  Game game;
   SocketManager socketManager;
 
   GameManager() {
-    this.gameController = GameController(this);
+    this.gameUI = GameUI();
+    this.game = Game(this, gameUI);
+
+    gameUI.state.game = game;
+
     init();
   }
 
   void init() async {
+    SecretManager.init();
+    Audios.instance.loadAll();
     doubleTap = DoubleTapGestureRecognizer();
     horizontal = HorizontalDragGestureRecognizer();
     vertical = VerticalDragGestureRecognizer();
@@ -38,22 +46,18 @@ class GameManager {
 
     this.socketManager = SocketManager(this)..connect();
 
-    doubleTap.onDoubleTap = gameController.onDoubleTap;
-    horizontal.onStart = gameController.onDragStart;
-    horizontal.onUpdate = gameController.onDragUpdate;
-    horizontal.onEnd = gameController.onDragEnd;
+    doubleTap.onDoubleTap = game.onDoubleTap;
+    horizontal.onStart = game.onDragStart;
+    horizontal.onUpdate = game.onDragUpdate;
+    horizontal.onEnd = game.onDragEnd;
 
-    vertical.onStart = gameController.onDragStart;
-    vertical.onUpdate = gameController.onDragUpdate;
-    vertical.onEnd = gameController.onDragEnd;
+    vertical.onStart = game.onDragStart;
+    vertical.onUpdate = game.onDragUpdate;
+    vertical.onEnd = game.onDragEnd;
 
     flameUtil.addGestureRecognizer(horizontal);
     flameUtil.addGestureRecognizer(vertical);
     flameUtil.addGestureRecognizer(doubleTap);
-  }
-
-  Widget start() {
-    return gameController.widget;
   }
 
   void handleMessage(List<dynamic> json) async {
@@ -71,11 +75,10 @@ class GameManager {
           var playerAdded = payload['player'];
 
           if (playerId == playerAdded['id']) {
-            World.instance.load(gameController, playerAdded, payload['world']);
-            this.loaded = true;
+            game.load(playerAdded, payload['world']);
             break;
           }
-          World.instance.addEnemy(Enemy.from(gameController, playerAdded));
+          World.instance.addEnemy(Enemy.from(game, playerAdded));
           break;
         case "game/player-removed":
           World.instance.removeEnemy(payload['player-id']);
@@ -102,7 +105,7 @@ class GameManager {
           World.instance.hitPlayers(playerIds);
           break;
         case "game/player-scored":
-          World.instance.player.scorePoint(payload['score']);
+          game.score(payload['score']);
           break;
       }
     });

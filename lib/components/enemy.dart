@@ -1,21 +1,21 @@
 import 'dart:ui';
 
 import 'package:grube/components/character.dart';
-import 'package:grube/game/controller.dart';
+import 'package:grube/game/game.dart';
 import 'package:grube/components/hurt.dart';
 
 class Enemy extends Character {
   Hurt _hurt;
 
   Enemy.from(
-    GameController gameController,
+    Game game,
     Map<String, dynamic> json,
   ) : super(
-          gameController,
+          game,
           json: json,
           color: Color(0xFF999999),
         ) {
-    this._hurt = Hurt.enemyHurt(gameController, this);
+    this._hurt = Hurt.enemyHurt(game, this);
   }
 
   @override
