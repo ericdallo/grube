@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:grube/components/enemy.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/manager.dart';
 import 'package:grube/game/ui.dart';
@@ -64,6 +65,10 @@ class Game extends BaseGame {
   void resize(Size size) {
     super.resize(size);
     this.screenSize = size;
+  }
+
+  void start() {
+    gameManager.start();
   }
 
   void onDoubleTap() {
@@ -144,7 +149,16 @@ class Game extends BaseGame {
     var world = World.instance;
     world.player.life = life;
     world.player.position = position;
+    ui.life(life);
     ui.changeScreen(UIScreen.playing);
+  }
+
+  void enemyRespawned(String enemyId, int life, Position position) async {
+    var world = World.instance;
+    Enemy enemy = world.enemies.singleWhere((enemy) => enemy.id == enemyId);
+
+    enemy.life = life;
+    enemy.position = position;
   }
 
   //TODO move to another class

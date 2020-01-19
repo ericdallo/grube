@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/ui/screens/game_over.dart';
+import 'package:grube/game/ui/screens/menu.dart';
 import 'package:grube/game/ui/screens/playing.dart';
 
 class GameUI extends StatefulWidget {
@@ -45,7 +46,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
   Game game;
   int score = 0;
   int life = MAX_LIFE;
-  UIScreen currentScreen = UIScreen.playing;
+  UIScreen currentScreen = UIScreen.menu;
 
   int time = 0;
   bool visible = false;
@@ -100,7 +101,26 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
     );
   }
 
-  Widget buildScreenPlaying() {
+  Widget menuScreen() {
+    return Positioned.fill(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GameTitle(),
+          StartGame(
+            onPressed: (() {
+              game.start();
+              currentScreen = UIScreen.playing;
+              update();
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget playingScreen() {
     return Positioned.fill(
       child: Column(
         children: [
@@ -110,7 +130,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
     );
   }
 
-  Widget buildScreenGameOver() {
+  Widget gameOverScreen() {
     return Positioned.fill(
       child: Column(
         children: [
@@ -142,8 +162,9 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
           child: IndexedStack(
             sizing: StackFit.expand,
             children: [
-              buildScreenPlaying(),
-              buildScreenGameOver(),
+              menuScreen(),
+              playingScreen(),
+              gameOverScreen(),
             ],
             index: currentScreen.index,
           ),
@@ -154,6 +175,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
 }
 
 enum UIScreen {
+  menu,
   playing,
   gameOver,
 }

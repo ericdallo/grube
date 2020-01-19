@@ -44,7 +44,7 @@ class GameManager {
     await flameUtil.fullScreen();
     await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-    this.socketManager = SocketManager(this)..connect();
+    this.socketManager = SocketManager(this);
 
     doubleTap.onDoubleTap = game.onDoubleTap;
     horizontal.onStart = game.onDragStart;
@@ -58,6 +58,10 @@ class GameManager {
     flameUtil.addGestureRecognizer(horizontal);
     flameUtil.addGestureRecognizer(vertical);
     flameUtil.addGestureRecognizer(doubleTap);
+  }
+
+  void start() {
+    this.socketManager.connect();
   }
 
   void handleMessage(List<dynamic> json) async {
@@ -107,14 +111,19 @@ class GameManager {
         case "game/player-scored":
           game.score(payload['score']);
           break;
-        case "game/player-respawned":
-          print(payload);
+        case 'game/player-respawned':
           var player = payload['player'];
           Position position = Position(
             player['position']['x'],
             player['position']['y'],
           );
-          game.playerRespawned(player['life'], position);
+
+          if (player['id'] == playerId) {
+            game.playerRespawned(player['life'], position);
+          } else {
+            game.enemyRespawned(player.id, player['life'], position);
+          }
+
           break;
       }
     });

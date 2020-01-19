@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class GameOver extends StatelessWidget {
+class GameTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'GAME OVER',
+      'GRUBE',
       style: TextStyle(
         fontSize: 40,
         color: Colors.black,
@@ -13,10 +13,10 @@ class GameOver extends StatelessWidget {
   }
 }
 
-class Respawn extends StatelessWidget {
+class StartGame extends StatelessWidget {
   final VoidCallback onPressed;
 
-  Respawn({this.onPressed});
+  StartGame({@required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,12 @@ class Respawn extends StatelessWidget {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       child: Text(
-        "RESPAWN",
+        "PLAY",
         style: TextStyle(
           fontSize: 24,
         ),
       ),
     );
   }
+ 
 }
