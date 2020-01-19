@@ -14,8 +14,22 @@ class GameOver extends StatelessWidget {
 }
 
 class Respawn extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  Respawn({this.onPressed});
+
   @override
   Widget build(BuildContext context) {
-    return Center();
+    return FlatButton(
+      onPressed: onPressed,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      child: Text(
+        "Respawn",
+        style: TextStyle(
+          fontSize: 24,
+        ),
+      ),
+    );
   }
 }

@@ -117,11 +117,15 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
           topUI(),
           Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GameOver(),
-                Respawn(),
+                Respawn(
+                  onPressed: (() {
+                    game.respawn();
+                  }),
+                ),
               ],
             ),
           ),

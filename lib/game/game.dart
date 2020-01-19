@@ -136,6 +136,17 @@ class Game extends BaseGame {
     }
   }
 
+  void respawn() async {
+    this.gameManager.socketManager.send("player-respawn", {});
+  }
+
+  void playerRespawned(int life, Position position) async {
+    var world = World.instance;
+    world.player.life = life;
+    world.player.position = position;
+    ui.changeScreen(UIScreen.playing);
+  }
+
   //TODO move to another class
   Direction _toDirection(DragUpdateDetails details) {
     if (details.delta.dx > 0) {

@@ -107,6 +107,15 @@ class GameManager {
         case "game/player-scored":
           game.score(payload['score']);
           break;
+        case "game/player-respawned":
+          print(payload);
+          var player = payload['player'];
+          Position position = Position(
+            player['position']['x'],
+            player['position']['y'],
+          );
+          game.playerRespawned(player['life'], position);
+          break;
       }
     });
   }
