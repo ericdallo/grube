@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/ui/screens/game_over.dart';
 import 'package:grube/game/ui/screens/menu.dart';
+import 'package:grube/game/ui/screens/loading.dart';
 import 'package:grube/game/ui/screens/playing.dart';
 
 class GameUI extends StatefulWidget {
@@ -110,13 +111,19 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
           GameTitle(),
           StartGame(
             onPressed: (() {
-              game.start();
-              currentScreen = UIScreen.playing;
+              currentScreen = UIScreen.loading;
               update();
+              game.start();
             }),
           ),
         ],
       ),
+    );
+  }
+
+  Widget loadingScreen() {
+    return Positioned.fill(
+      child: Loading(),
     );
   }
 
@@ -163,6 +170,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
             sizing: StackFit.expand,
             children: [
               menuScreen(),
+              loadingScreen(),
               playingScreen(),
               gameOverScreen(),
             ],
@@ -176,6 +184,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
 
 enum UIScreen {
   menu,
+  loading,
   playing,
   gameOver,
 }

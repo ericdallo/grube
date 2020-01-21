@@ -122,6 +122,7 @@ class Game extends BaseGame {
   void load(player, world) {
     World.instance.load(this, player, world);
     this.loaded = true;
+    ui.changeScreen(UIScreen.playing);
   }
 
   void score(int score) async {

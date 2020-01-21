@@ -11,6 +11,7 @@ void main() async {
     MaterialApp(
       title: 'Grube',
       theme: ThemeData(fontFamily: 'PressStart2P'),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Stack(
           fit: StackFit.expand,
