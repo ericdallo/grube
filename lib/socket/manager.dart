@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
+import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -17,7 +18,8 @@ class SocketManager {
   }
 
   void initialize() async {
-    url = "${SecretManager.secrets.apiURL}/chsk?client-id=123";
+    var uuid = Uuid().v1();
+    url = "${SecretManager.secrets.apiURL}/chsk?client-id=$uuid" ;
   }
 
   void connect() {

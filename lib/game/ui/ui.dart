@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/ui/screens/game_over.dart';
-import 'package:grube/game/ui/screens/menu.dart';
 import 'package:grube/game/ui/screens/loading.dart';
+import 'package:grube/game/ui/screens/menu.dart';
 import 'package:grube/game/ui/screens/playing.dart';
 
 class GameUI extends StatefulWidget {

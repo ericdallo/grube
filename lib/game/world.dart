@@ -42,6 +42,17 @@ class World {
     });
   }
 
+  void playerShot(List<dynamic> bullets) {
+    player.moveBullets(bullets);
+  }
+
+  void enemyShot(String enemyId, List<dynamic> bullets) {
+    this
+        .enemies
+        .where((enemy) => enemy.id == enemyId)
+        .forEach((enemy) => enemy.moveBullets(bullets));
+  }
+
   void moveBullets(Map<String, dynamic> bulletsByPlayer) {
     bulletsByPlayer.forEach((playerId, bullets) {
       if (playerId == player.id) {

@@ -6,7 +6,7 @@ import 'package:grube/components/enemy.dart';
 import 'package:grube/config/secret.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
-import 'package:grube/game/ui.dart';
+import 'package:grube/game/ui/ui.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
@@ -100,6 +100,14 @@ class GameManager {
             World.instance.moveEnemy(player['id'], position, direction);
           }
           break;
+        case "game/player-shot":
+          var bullets = payload['bullets'];
+          World.instance.playerShot(bullets);
+          break;
+        case "game/enemy-shot":
+          var bullets = payload['bullets'];
+          World.instance.enemyShot(payload['enemy-id'], bullets);
+          break;
         case "game/bullets-moved":
           var bullets = payload['bullets-by-player'];
           World.instance.moveBullets(bullets);
@@ -121,7 +129,7 @@ class GameManager {
           if (player['id'] == playerId) {
             game.playerRespawned(player['life'], position);
           } else {
-            game.enemyRespawned(player.id, player['life'], position);
+            game.enemyRespawned(player['id'], player['life'], position);
           }
 
           break;

@@ -75,8 +75,26 @@ class Player extends Character {
       return;
     }
 
+    var bulletPosition = position.clone();
+
+    if (direction == Direction.right) {
+      bulletPosition.x++;
+    }
+
+    if (direction == Direction.left) {
+      bulletPosition.x--;
+    }
+
+    if (direction == Direction.down) {
+      bulletPosition.y++;
+    }
+
+    if (direction == Direction.up) {
+      bulletPosition.y--;
+    }
+
     _stamina.tire();
-    game.playerShot(direction, position, _stamina.refuelTime());
+    game.playerShot(direction, bulletPosition, _stamina.refuelTime());
   }
 
   void hit() {
@@ -112,5 +130,4 @@ class _Stamina {
   void tire() {
     _charging = true;
   }
-
 }

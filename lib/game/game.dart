@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:grube/components/enemy.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/manager.dart';
-import 'package:grube/game/ui.dart';
+import 'package:grube/game/ui/ui.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
@@ -84,7 +84,7 @@ class Game extends BaseGame {
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canMove && loaded) {
-      World.instance.player.move(_toDirection(details));
+      World.instance.player.move(toDirection(details));
     }
     this.canMove = false;
   }
@@ -162,20 +162,4 @@ class Game extends BaseGame {
     enemy.position = position;
   }
 
-  //TODO move to another class
-  Direction _toDirection(DragUpdateDetails details) {
-    if (details.delta.dx > 0) {
-      return Direction.right;
-    }
-
-    if (details.delta.dx < 0) {
-      return Direction.left;
-    }
-
-    if (details.delta.dy > 0) {
-      return Direction.down;
-    }
-
-    return Direction.up;
-  }
 }
