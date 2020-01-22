@@ -13,7 +13,7 @@ class Bullet {
   Position position;
 
   Paint _paint;
-  RRect _rrect;
+  Rect _rect;
 
   Bullet.from(
     Game game,
@@ -40,16 +40,15 @@ class Bullet {
       centerY = playerHeight / 2 - (BIG_SIZE / 2);
     }
 
-    Rect rect = Rect.fromLTWH(
+    _rect = Rect.fromLTWH(
       position.x * playerWidth + centerX,
       position.y * playerHeight + centerY,
       width,
       height,
     );
-    _rrect = RRect.fromRectXY(rect, 2, 2);
   }
 
   void render(Canvas c) {
-    c.drawRRect(_rrect, _paint);
+    c.drawRect(_rect, _paint);
   }
 }
