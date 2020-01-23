@@ -20,7 +20,6 @@ class Enemy extends Character {
 
   @override
   void update(double t) {
-    super.update(t);
     _hurt.update(t);
   }
 
