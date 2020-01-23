@@ -1,4 +1,4 @@
-package com.example.grube
+package com.gregcodes.grube
 
 import android.os.Bundle
 

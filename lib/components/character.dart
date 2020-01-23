@@ -1,3 +1,4 @@
+import 'package:flame/components/component.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grube/components/bullet.dart';
@@ -6,7 +7,7 @@ import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/enums.dart';
 
-abstract class Character {
+abstract class Character extends PositionComponent {
   final Game game;
   List<Bullet> bullets;
 
@@ -16,7 +17,6 @@ abstract class Character {
   Direction direction;
   int life;
 
-  Rect rect;
   Paint paint;
   double xStep;
   double yStep;
@@ -26,13 +26,11 @@ abstract class Character {
   Character(this.game,
       {@required Map<String, dynamic> json, @required Color color}) {
     final width = game.screenSize.width / World.instance.size.width;
-    final height =
-        game.screenSize.height / World.instance.size.height;
+    final height = game.screenSize.height / World.instance.size.height;
 
     this.id = json['id'];
     this.bullets = json['bullets']
-        .map((bullet) =>
-            Bullet.from(game, width, height, color, bullet))
+        .map((bullet) => Bullet.from(game, width, height, color, bullet))
         .toList()
         .cast<Bullet>();
     this.position = Position(json['position']['x'], json['position']['y']);
@@ -43,27 +41,17 @@ abstract class Character {
     this.xStep = json['step'] * width;
     this.yStep = json['step'] * height;
     this.paint = Paint()..color = color;
-    _buildShape();
+
+    this.x = position.x * size.width;
+    this.y = position.y * size.height;
+    this.width = size.width;
+    this.height = size.height;
   }
 
-  void _buildShape() {
-    rect = Rect.fromLTWH(
-      position.x * size.width,
-      position.y * size.height,
-      size.width,
-      size.height,
-    );
-  }
-
-  void update(double t) {
-    if (live) {
-      _buildShape();
-    }
-  }
-
+  @override
   void render(Canvas c) {
     if (live) {
-      c.drawRect(rect, paint);
+      c.drawRect(toRect(), paint);
     }
 
     this.bullets.forEach((bullet) => bullet.render(c));
