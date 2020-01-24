@@ -45,10 +45,19 @@ abstract class Character extends PositionComponent {
     this.yStep = json['step'] * height;
     this.paint = Paint()..color = color;
 
-    this.x = position.x * size.width;
-    this.y = position.y * size.height;
     this.width = size.width;
     this.height = size.height;
+    _updatePosition();
+  }
+
+  void _updatePosition() {
+    this.x = position.x * size.width;
+    this.y = position.y * size.height;
+  }
+
+  @override
+  void update(double t) {
+    _updatePosition();
   }
 
   @override
