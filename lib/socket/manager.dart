@@ -16,6 +16,7 @@ class SocketManager {
 
   WebSocketChannel channel;
   String playerId;
+  bool tryConnect = true;
 
   SocketManager(this.gameManager) {
     initialize();
@@ -26,7 +27,15 @@ class SocketManager {
     url = "${SecretManager.secrets.apiURL}/chsk?client-id=$uuid";
   }
 
+  void prepareToConnect() {
+    this.tryConnect = true;
+  }
+
   void connect() async {
+    if (!tryConnect) {
+      return;
+    }
+
     this.channel = IOWebSocketChannel.connect(url);
     channel.stream.listen(
       (message) {
@@ -47,6 +56,7 @@ class SocketManager {
   }
 
   void disconnect() async {
+    tryConnect = false;
     channel.sink.close(status.goingAway);
   }
 

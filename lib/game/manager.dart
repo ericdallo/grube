@@ -58,7 +58,8 @@ class GameManager {
     flameUtil.addGestureRecognizer(doubleTap);
   }
 
-  void start() async {
+  void start() {
+    this.socketManager.prepareToConnect();
     this.socketManager.connect();
   }
 
@@ -145,13 +146,10 @@ class GameManager {
   }
 
   Future<bool> onBackPressed() async {
-    if (gameUI.state.currentScreen == UIScreen.playing) {
-      stop();
-      gameUI.changeScreen(UIScreen.menu);
-      return false;
-    }
-
-    if (gameUI.state.currentScreen == UIScreen.gameOver) {
+    var screen = gameUI.state.currentScreen;
+    if (screen == UIScreen.playing ||
+        screen == UIScreen.loading ||
+        screen == UIScreen.menu) {
       stop();
       gameUI.changeScreen(UIScreen.menu);
       return false;
