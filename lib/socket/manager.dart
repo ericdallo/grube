@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
+import 'package:grube/game/ui/ui.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
@@ -27,11 +28,38 @@ class SocketManager {
     url = "${SecretManager.secrets.apiURL}/chsk?client-id=$uuid";
   }
 
-  void prepareToConnect() {
-    this.tryConnect = true;
+  void handleMsg(message) async {
+    var json = jsonDecode(message.substring(1));
+    if (json is String) {
+      return;
+    }
+    gameManager.handleMessage(json);
+  }
+
+  void handleError(error, StackTrace stackTrace) async {
+    logger.e(error);
+    if (error is WebSocketChannelException) {
+      await Future.delayed(Duration(seconds: 1));
+      reconnect();
+    }
   }
 
   void connect() async {
+    this.tryConnect = true;
+    this.channel = IOWebSocketChannel.connect(url);
+    channel.stream.listen(
+      handleMsg,
+      onError: handleError,
+      onDone: () async {
+        if (gameManager.gameUI.state.currentScreen == UIScreen.playing) {
+          reconnect();
+        }
+      },
+    );
+  }
+
+  void reconnect() async {
+    gameManager.gameUI.changeScreen(UIScreen.reconnecting);
     if (!tryConnect) {
       return;
     }
@@ -39,17 +67,14 @@ class SocketManager {
     this.channel = IOWebSocketChannel.connect(url);
     channel.stream.listen(
       (message) {
-        var json = jsonDecode(message.substring(1));
-        if (json is String) {
-          return;
-        }
-        gameManager.handleMessage(json);
+        gameManager.gameUI.changeScreen(UIScreen.playing);
+        handleMsg(message);
       },
-      onError: (error, StackTrace stackTrace) async {
-        logger.e(error);
-        if (error is WebSocketChannelException) {
+      onError: handleError,
+      onDone: () async {
+        if (gameManager.gameUI.state.currentScreen == UIScreen.playing) {
           await Future.delayed(Duration(seconds: 1));
-          connect();
+          reconnect();
         }
       },
     );

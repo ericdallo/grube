@@ -59,13 +59,12 @@ class GameManager {
   }
 
   void start() {
-    this.socketManager.prepareToConnect();
     this.socketManager.connect();
   }
 
   void stop() async {
-    this.socketManager.disconnect();
     this.game.unload();
+    this.socketManager.disconnect();
   }
 
   void handleMessage(List<dynamic> json) async {
@@ -148,10 +147,11 @@ class GameManager {
   Future<bool> onBackPressed() async {
     var screen = gameUI.state.currentScreen;
     if (screen == UIScreen.playing ||
-        screen == UIScreen.loading ||
+        screen == UIScreen.connecting ||
         screen == UIScreen.menu) {
-      stop();
+
       gameUI.changeScreen(UIScreen.menu);
+      stop();
       return false;
     }
 

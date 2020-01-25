@@ -111,7 +111,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
           GameTitle(),
           StartGame(
             onPressed: (() {
-              currentScreen = UIScreen.loading;
+              currentScreen = UIScreen.connecting;
               update();
               game.start();
             }),
@@ -121,9 +121,15 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
     );
   }
 
-  Widget loadingScreen() {
+  Widget connectingScreen() {
     return Positioned.fill(
-      child: Loading(),
+      child: Loading("CONNECTING"),
+    );
+  }
+
+  Widget reconnectingScreen() {
+    return Positioned.fill(
+      child: Loading("RECONNECTING"),
     );
   }
 
@@ -170,8 +176,9 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
             sizing: StackFit.expand,
             children: [
               menuScreen(),
-              loadingScreen(),
+              connectingScreen(),
               playingScreen(),
+              reconnectingScreen(),
               gameOverScreen(),
             ],
             index: currentScreen.index,
@@ -184,7 +191,8 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
 
 enum UIScreen {
   menu,
-  loading,
+  connecting,
   playing,
+  reconnecting,
   gameOver,
 }
