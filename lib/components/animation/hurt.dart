@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/position.dart';
-import 'package:grube/components/enemy.dart';
 import 'package:grube/game/game.dart';
 
 const double HURT_TIME = 0.2;

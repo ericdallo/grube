@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:grube/components/animation/die.dart';
+import 'package:grube/components/animation/hurt.dart';
 import 'package:grube/components/character.dart';
 import 'package:grube/game/game.dart';
-import 'package:grube/components/animation/hurt.dart';
-import 'package:grube/components/animation/die.dart';
 
 class Enemy extends Character {
   HurtAnimation _hurtAnimation;
