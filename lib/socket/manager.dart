@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
+import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+final logger = Logger();
 
 class SocketManager {
   GameManager gameManager;
@@ -24,7 +27,7 @@ class SocketManager {
   }
 
   void connect() async {
-    channel = IOWebSocketChannel.connect(url);
+    this.channel = IOWebSocketChannel.connect(url);
     channel.stream.listen(
       (message) {
         var json = jsonDecode(message.substring(1));
@@ -33,8 +36,12 @@ class SocketManager {
         }
         gameManager.handleMessage(json);
       },
-      onError: (error, StackTrace stackTrace) {
-        print("error: $error");
+      onError: (error, StackTrace stackTrace) async {
+        logger.e(error);
+        if (error is WebSocketChannelException) {
+          await Future.delayed(Duration(seconds: 1));
+          connect();
+        }
       },
     );
   }
