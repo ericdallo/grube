@@ -1,13 +1,15 @@
 import 'dart:ui';
 
 import 'package:grube/components/character.dart';
-import 'package:grube/components/hurt.dart';
+import 'package:grube/components/animation/die.dart';
+import 'package:grube/components/animation/hurt.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
 
 class Player extends Character {
-  Hurt _hurt;
+  HurtAnimation _hurtAnimation;
+  DieAnimation _dieAnimation;
   _Stamina _stamina;
 
   Player.from(Game game, Map<String, dynamic> json)
@@ -16,14 +18,17 @@ class Player extends Character {
           json: json,
           color: Color(json['color']),
         ) {
-    this._hurt = Hurt.screenHurt(game);
+    this._hurtAnimation = HurtAnimation(game);
+    this._dieAnimation = DieAnimation(game, this);
     this._stamina = _Stamina(game, json['stamina']);
   }
 
   @override
   void update(double t) {
     super.update(t);
-    _hurt.update(t);
+    _hurtAnimation.update(t);
+    _dieAnimation.updateDimensions(position, size);
+    _dieAnimation.update(t);
 
     if (!_stamina.charging()) {
       return;
@@ -35,7 +40,8 @@ class Player extends Character {
   @override
   void render(Canvas c) {
     super.render(c);
-    _hurt.render(c);
+    _hurtAnimation.render(c);
+    _dieAnimation.render(c);
   }
 
   void move(Direction direction) {
@@ -99,7 +105,11 @@ class Player extends Character {
 
   void hit() {
     super.hit();
-    _hurt.hurt();
+    if (live) {
+      _hurtAnimation.play();
+    } else {
+      _dieAnimation.play();
+    }
     game.playerHurted();
   }
 }
