@@ -4,6 +4,7 @@ import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketManager {
@@ -19,10 +20,10 @@ class SocketManager {
 
   void initialize() async {
     var uuid = Uuid().v1();
-    url = "${SecretManager.secrets.apiURL}/chsk?client-id=$uuid" ;
+    url = "${SecretManager.secrets.apiURL}/chsk?client-id=$uuid";
   }
 
-  void connect() {
+  void connect() async {
     channel = IOWebSocketChannel.connect(url);
     channel.stream.listen(
       (message) {
@@ -36,6 +37,10 @@ class SocketManager {
         print("error: $error");
       },
     );
+  }
+
+  void disconnect() async {
+    channel.sink.close(status.goingAway);
   }
 
   void send(String action, message) async {

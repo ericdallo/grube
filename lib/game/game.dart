@@ -20,8 +20,6 @@ class Game extends BaseGame {
 
   Size screenSize;
 
-  Random random;
-
   bool canMove;
   bool loaded = false;
 
@@ -101,7 +99,7 @@ class Game extends BaseGame {
     });
   }
 
-  void playerShot(
+  void onPlayerShot(
     Direction direction,
     Position position,
     int staminaTime,
@@ -115,7 +113,7 @@ class Game extends BaseGame {
     });
   }
 
-  void staminaCharged() {
+  void staminaCharged() async {
     ui.staminaCharged();
   }
 
@@ -125,12 +123,46 @@ class Game extends BaseGame {
     ui.changeScreen(UIScreen.playing);
   }
 
+  void unload() {
+    this.loaded = false;
+    gameManager.playerId = null;
+    World.instance.unload();
+  }
+
+  void addEnemy(enemy) {
+    World.instance.addEnemy(Enemy.from(this, enemy));
+  }
+
+  void removeEnemy(String playerId) {
+    World.instance.removeEnemy(playerId);
+  }
+
+  void moveEnemy(String enemyId, Position position, Direction direction) {
+    World.instance.moveEnemy(enemyId, position, direction);
+  }
+
+  void playerShot(bullets) {
+    World.instance.playerShot(bullets);
+  }
+
+  void enemyShot(String enemyId, bullets) {
+    World.instance.enemyShot(enemyId, bullets);
+  }
+
+  void moveBullets(bullets) {
+    World.instance.moveBullets(bullets);
+  }
+
+  void hitPlayers(List<String> playerIds) {
+    World.instance.hitPlayers(playerIds);
+  }
+
   void score(int score) async {
     Flame.audio.play(Audios.score);
     ui.score(score);
   }
 
-  void playerHurted() {
+  void playerHurted() async {
     var world = World.instance;
     ui.life(world.player.life);
 
@@ -161,5 +193,4 @@ class Game extends BaseGame {
     enemy.life = life;
     enemy.position = position;
   }
-
 }

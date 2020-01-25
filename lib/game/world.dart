@@ -27,6 +27,12 @@ class World {
             .toList();
   }
 
+  void unload() {
+    this.size = null;
+    this.player = null;
+    this.enemies = [];
+  }
+
   void addEnemy(Enemy enemy) {
     this.enemies.add(enemy);
   }

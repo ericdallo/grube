@@ -2,12 +2,10 @@ import 'package:flame/position.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:grube/components/enemy.dart';
 import 'package:grube/config/secret.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/ui/ui.dart';
-import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
 import 'package:grube/socket/manager.dart';
@@ -60,12 +58,17 @@ class GameManager {
     flameUtil.addGestureRecognizer(doubleTap);
   }
 
-  void start() {
+  void start() async {
     this.socketManager.connect();
   }
 
+  void stop() async {
+    this.socketManager.disconnect();
+    this.game.unload();
+  }
+
   void handleMessage(List<dynamic> json) async {
-    if (playerId == null) {
+    if (json[0] == "chsk/handshake") {
       playerId = json.last[0];
       return;
     }
@@ -74,18 +77,22 @@ class GameManager {
       String eventName = event[0];
       var payload = event[1];
 
+      if (eventName == "game/player-added" &&
+          playerId == payload['player']['id']) {
+        game.load(payload['player'], payload['world']);
+        return;
+      }
+
+      if (!game.loaded) {
+        return;
+      }
+
       switch (eventName) {
         case "game/player-added":
-          var playerAdded = payload['player'];
-
-          if (playerId == playerAdded['id']) {
-            game.load(playerAdded, payload['world']);
-            break;
-          }
-          World.instance.addEnemy(Enemy.from(game, playerAdded));
+          game.addEnemy(payload['player']);
           break;
         case "game/player-removed":
-          World.instance.removeEnemy(payload['player-id']);
+          game.removeEnemy(payload['player-id']);
           break;
         case "game/player-moved":
           var player = payload['player'];
@@ -97,24 +104,24 @@ class GameManager {
               player['position']['x'],
               player['position']['y'],
             );
-            World.instance.moveEnemy(player['id'], position, direction);
+            game.moveEnemy(player['id'], position, direction);
           }
           break;
         case "game/player-shot":
           var bullets = payload['bullets'];
-          World.instance.playerShot(bullets);
+          game.playerShot(bullets);
           break;
         case "game/enemy-shot":
           var bullets = payload['bullets'];
-          World.instance.enemyShot(payload['enemy-id'], bullets);
+          game.enemyShot(payload['enemy-id'], bullets);
           break;
         case "game/bullets-moved":
           var bullets = payload['bullets-by-player'];
-          World.instance.moveBullets(bullets);
+          game.moveBullets(bullets);
           break;
         case "game/players-hitted":
           List<String> playerIds = payload['player-ids'].cast<String>();
-          World.instance.hitPlayers(playerIds);
+          game.hitPlayers(playerIds);
           break;
         case "game/player-scored":
           game.score(payload['score']);
@@ -135,5 +142,21 @@ class GameManager {
           break;
       }
     });
+  }
+
+  Future<bool> onBackPressed() async {
+    if (gameUI.state.currentScreen == UIScreen.playing) {
+      stop();
+      gameUI.changeScreen(UIScreen.menu);
+      return false;
+    }
+
+    if (gameUI.state.currentScreen == UIScreen.gameOver) {
+      stop();
+      gameUI.changeScreen(UIScreen.menu);
+      return false;
+    }
+
+    return true;
   }
 }

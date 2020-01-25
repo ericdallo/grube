@@ -100,7 +100,7 @@ class Player extends Character {
     }
 
     _stamina.tire();
-    game.playerShot(direction, bulletPosition, _stamina.refuelTime());
+    game.onPlayerShot(direction, bulletPosition, _stamina.refuelTime());
   }
 
   void hit() {

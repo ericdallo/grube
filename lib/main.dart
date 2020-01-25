@@ -5,26 +5,33 @@ import 'package:grube/game/manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  GameManager gameManager = GameManager();
+  runApp(App());
+}
 
-  runApp(
-    MaterialApp(
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    GameManager gameManager = GameManager();
+
+    return MaterialApp(
       title: 'Grube',
       theme: ThemeData(fontFamily: 'PressStart2P'),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Positioned.fill(
-              child: gameManager.game.widget,
-            ),
-            Positioned.fill(
-              child: gameManager.gameUI,
-            )
-          ],
-        ),
+      home: WillPopScope(
+        child: Scaffold(
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned.fill(
+                child: gameManager.game.widget,
+              ),
+              Positioned.fill(
+                child: gameManager.gameUI,
+              )
+            ],
+          ),
+        ), onWillPop: gameManager.onBackPressed,
       ),
-    ),
-  );
+    );
+  }
 }
