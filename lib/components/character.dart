@@ -16,6 +16,7 @@ abstract class Character extends PositionComponent {
   Position position;
   Direction direction;
   int life;
+  int score;
 
   Paint paint;
   double xStep;
@@ -39,6 +40,7 @@ abstract class Character extends PositionComponent {
     this.position = Position(json['position']['x'], json['position']['y']);
     this.direction = Enums.fromString(Direction.values, json['direction']);
     this.life = json['life'];
+    this.score = json['score'];
 
     this.size = Size(width, height);
     this.xStep = json['step'] * width;

@@ -157,9 +157,13 @@ class Game extends BaseGame {
     World.instance.hitPlayers(playerIds);
   }
 
-  void score(int score) async {
+  void playerScore(int score) async {
     Flame.audio.play(Audios.score);
     ui.score(score);
+  }
+
+  void enemiesScored(enemies) async {
+    World.instance.enemiesScored(enemies);
   }
 
   void playerHurted() async {

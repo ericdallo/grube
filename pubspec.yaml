@@ -1,7 +1,7 @@
 name: grube
 description: A multiplayer Flutter game using Flame engine
 
-version: 1.0.12+5
+version: 1.1.0+6
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

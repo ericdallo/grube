@@ -84,4 +84,13 @@ class World {
           .forEach((enemy) => enemy.hit());
     });
   }
+
+  void enemiesScored(enemies) {
+    enemies.forEach((enemyScored) {
+        Enemy enemy = this.enemies.singleWhere((enemy) => enemy.id == enemyScored['id']);
+
+        enemy.score = enemyScored['score'];
+    });
+
+  }
 }

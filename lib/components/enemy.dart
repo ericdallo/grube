@@ -3,11 +3,13 @@ import 'dart:ui';
 import 'package:grube/components/animation/die.dart';
 import 'package:grube/components/animation/hurt.dart';
 import 'package:grube/components/character.dart';
+import 'package:grube/components/score_text.dart';
 import 'package:grube/game/game.dart';
 
 class Enemy extends Character {
   HurtAnimation _hurtAnimation;
   DieAnimation _dieAnimation;
+  ScoreText _scoreText;
 
   Enemy.from(
     Game game,
@@ -19,6 +21,8 @@ class Enemy extends Character {
         ) {
     this._hurtAnimation = HurtAnimation(game);
     this._dieAnimation = DieAnimation(game, this);
+    this._scoreText = ScoreText(this.score, this.size);
+    this.game.add(_scoreText);
   }
 
   @override
@@ -26,8 +30,12 @@ class Enemy extends Character {
     super.update(t);
     _dieAnimation.updateDimensions(position, size);
     _hurtAnimation.updateDimensions(position, size);
+    _scoreText.updateDimensions(position);
+    _scoreText.updateScore(score);
+
     _hurtAnimation.update(t);
     _dieAnimation.update(t);
+    _scoreText.update(t);
   }
 
   @override
@@ -35,6 +43,9 @@ class Enemy extends Character {
     super.render(c);
     _hurtAnimation.render(c);
     _dieAnimation.render(c);
+    if (live) {
+      _scoreText.render(c);
+    }
   }
 
   void hit() {
