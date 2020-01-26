@@ -124,7 +124,10 @@ class GameManager {
           game.hitPlayers(playerIds);
           break;
         case "game/player-scored":
-          game.score(payload['score']);
+          game.playerScore(payload['score']);
+          break;
+        case "game/enemies-scored":
+          game.enemiesScored(payload['enemies']);
           break;
         case 'game/player-respawned':
           var player = payload['player'];
@@ -149,7 +152,6 @@ class GameManager {
     if (screen == UIScreen.playing ||
         screen == UIScreen.connecting ||
         screen == UIScreen.menu) {
-
       gameUI.changeScreen(UIScreen.menu);
       stop();
       return false;
