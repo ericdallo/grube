@@ -12,8 +12,7 @@ class GameUI extends StatefulWidget {
   State<StatefulWidget> createState() => state;
 
   void score(int score) {
-    state.score = score;
-    state.update();
+    state.scoreKey.currentState.update(score);
   }
 
   void life(int life) {
@@ -45,8 +44,11 @@ const MAX_LIFE = 3;
 
 class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
   Game game;
-  int score = 0;
+
+  final GlobalKey<ScoreState> scoreKey = GlobalKey<ScoreState>(debugLabel: "bla");
+
   int life = MAX_LIFE;
+  bool animateScore = false;
   UIScreen currentScreen = UIScreen.menu;
 
   int time = 0;
@@ -81,7 +83,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
                 maxLife: MAX_LIFE,
               ),
               Expanded(child: Center()),
-              Score(score),
+              Score(key: scoreKey),
             ],
           ),
           Padding(

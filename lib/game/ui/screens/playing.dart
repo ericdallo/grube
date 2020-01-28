@@ -1,11 +1,20 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-class Score extends StatelessWidget {
-  final int _score;
+class Score extends StatefulWidget {
+  final ScoreState _state = ScoreState();
 
-  Score(this._score);
+  Score({Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _state;
+}
+
+class ScoreState extends State<Score> {
+  int _score = 0;
+  Color _color = Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +22,22 @@ class Score extends StatelessWidget {
       _score.toStringAsFixed(0),
       style: TextStyle(
         fontSize: 36,
-        color: Colors.black,
+        color: _color,
       ),
     );
+  }
+
+  void update(int score) {
+    setState(() {
+      this._score = score;
+      this._color = Colors.yellow;
+    });
+
+    Timer(Duration(seconds: 2), () {
+      setState(() {
+        this._color = Colors.black;
+      });
+    });
   }
 }
 
