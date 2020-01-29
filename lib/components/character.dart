@@ -2,6 +2,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grube/components/bullet.dart';
+import 'package:grube/components/crown.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
@@ -10,6 +11,7 @@ import 'package:grube/helpers/enums.dart';
 abstract class Character extends PositionComponent {
   final Game game;
   List<Bullet> bullets;
+  Crown _crown;
 
   String id;
   Size size;
@@ -50,6 +52,9 @@ abstract class Character extends PositionComponent {
     this.width = size.width;
     this.height = size.height;
     _updatePosition();
+
+    this._crown = Crown(this.position, this.size);
+    game.add(_crown);
   }
 
   void _updatePosition() {
@@ -60,6 +65,8 @@ abstract class Character extends PositionComponent {
   @override
   void update(double t) {
     _updatePosition();
+    _crown.updateDimensions(position, size);
+    _crown.update(t);
   }
 
   @override
@@ -69,6 +76,8 @@ abstract class Character extends PositionComponent {
     }
 
     this.bullets.forEach((bullet) => bullet.render(c));
+
+    _crown.render(c);
   }
 
   void moveBullets(List<dynamic> bulletsJson) {
@@ -85,5 +94,13 @@ abstract class Character extends PositionComponent {
 
   void hit() {
     life--;
+  }
+
+  void crown() {
+    this._crown.show = true;
+  }
+
+  void uncrown() {
+    this._crown.show = false;
   }
 }

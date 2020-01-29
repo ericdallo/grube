@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:grube/components/character.dart';
 import 'package:grube/components/animation/die.dart';
 import 'package:grube/components/animation/hurt.dart';
+import 'package:grube/components/character.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';

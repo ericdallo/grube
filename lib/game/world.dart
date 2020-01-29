@@ -87,10 +87,27 @@ class World {
 
   void enemiesScored(enemies) {
     enemies.forEach((enemyScored) {
-        Enemy enemy = this.enemies.singleWhere((enemy) => enemy.id == enemyScored['id']);
+      Enemy enemy =
+          this.enemies.singleWhere((enemy) => enemy.id == enemyScored['id']);
 
-        enemy.score = enemyScored['score'];
+      enemy.score = enemyScored['score'];
     });
+  }
 
+  void updateCrownedPlayer(String playerId) {
+    if (playerId == player.id) {
+      this.player.crown();
+      this.enemies.forEach((enemy) => enemy.uncrown());
+      return;
+    }
+
+    this.player.uncrown();
+    this.enemies.forEach((enemy) {
+      if (enemy.id == playerId) {
+        enemy.crown();
+      } else {
+        enemy.uncrown();
+      }
+    });
   }
 }

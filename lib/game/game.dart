@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/flame.dart';
@@ -157,13 +156,15 @@ class Game extends BaseGame {
     World.instance.hitPlayers(playerIds);
   }
 
-  void playerScore(int score) async {
+  void playerScore(int score, String crownedPlayerId) async {
     Flame.audio.play(Audios.score);
     ui.score(score);
+    World.instance.updateCrownedPlayer(crownedPlayerId);
   }
 
-  void enemiesScored(enemies) async {
+  void enemiesScored(enemies, String crownedPlayerId) async {
     World.instance.enemiesScored(enemies);
+    World.instance.updateCrownedPlayer(crownedPlayerId);
   }
 
   void playerHurted() async {

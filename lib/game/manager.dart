@@ -124,10 +124,12 @@ class GameManager {
           game.hitPlayers(playerIds);
           break;
         case "game/player-scored":
-          game.playerScore(payload['score']);
+          String crownedPlayer = payload['crowned-player'];
+          game.playerScore(payload['score'], crownedPlayer);
           break;
         case "game/enemies-scored":
-          game.enemiesScored(payload['enemies']);
+          String crownedPlayer = payload['crowned-player'];
+          game.enemiesScored(payload['enemies'], crownedPlayer);
           break;
         case 'game/player-respawned':
           var player = payload['player'];
