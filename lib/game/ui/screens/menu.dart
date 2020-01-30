@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grube/game/ui/components/button.dart';
 
 class GameTitle extends StatelessWidget {
   @override
@@ -13,24 +14,12 @@ class GameTitle extends StatelessWidget {
   }
 }
 
-class StartGame extends StatelessWidget {
-  final VoidCallback onPressed;
+class Play extends GameButton {
 
-  StartGame({@required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: onPressed,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      child: Text(
-        "PLAY",
-        style: TextStyle(
+  Play({@required VoidCallback onPressed})
+      : super(
+          text: "PLAY",
           fontSize: 24,
-        ),
-      ),
-    );
-  }
- 
+          onPressed: onPressed,
+        );
 }

@@ -1,7 +1,7 @@
 name: grube
 description: A multiplayer Flutter game using Flame engine
 
-version: 1.3.2+7
+version: 1.3.3+8
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -37,6 +37,7 @@ flutter:
     - assets/images/crown.png
     - assets/images/empty_life.png
     - assets/images/full_life.png
+    - assets/audio/click.mp3
     - assets/audio/player_hurt.mp3
     - assets/audio/game_over.mp3
     - assets/audio/score.mp3

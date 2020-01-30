@@ -109,7 +109,7 @@ class _GameUIState extends State<GameUI> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GameTitle(),
-          StartGame(
+          Play(
             onPressed: (() {
               currentScreen = UIScreen.connecting;
               update();

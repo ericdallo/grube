@@ -1,6 +1,7 @@
 import 'package:flame/flame.dart';
 
 class Audios {
+  static String click = 'click.mp3';
   static String hurt = 'player_hurt.mp3';
   static String gameOver = 'game_over.mp3';
   static String shoot = 'shoot.mp3';
@@ -15,7 +16,7 @@ class Audios {
   }
 
   void loadAll() async {
-    await Flame.audio.loadAll([hurt, gameOver, score, shoot]);
+    await Flame.audio.loadAll([click, hurt, gameOver, score, shoot]);
   }
 
 }
