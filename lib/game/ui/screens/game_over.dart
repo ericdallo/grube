@@ -19,7 +19,7 @@ class GameOverScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _Title(),
+                const _Title(),
                 _Respawn(onPressed: onRespawnPressed),
               ],
             ),
@@ -31,11 +31,13 @@ class GameOverScreen extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
+  const _Title();
+ 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       'GAME OVER',
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 40,
         color: Colors.black,
       ),

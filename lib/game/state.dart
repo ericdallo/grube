@@ -67,8 +67,7 @@ class GameStateProvider extends StatefulWidget {
 
   GameStateProvider({
     @required this.child,
-    @required this.data,
-  });
+  }) : this.data = GameState();
 
   static GameStateProviderState of(BuildContext context) {
     return context

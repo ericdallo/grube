@@ -83,6 +83,5 @@ class _GameButtonState extends State<GameButton>
 
   void _unPressedOnTapUp(_) => _unPressed();
 
-  void _unPressed() {
-  }
+  void _unPressed() {}
 }

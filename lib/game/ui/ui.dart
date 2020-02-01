@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grube/game/manager.dart';
+import 'package:grube/game/state.dart';
 import 'package:grube/game/ui/components/top.dart';
 import 'package:grube/game/ui/screen.dart';
 import 'package:grube/game/ui/screens/game_over.dart';
-import 'package:grube/game/ui/state.dart';
 import 'package:grube/game/ui/screens/loading.dart';
 import 'package:grube/game/ui/screens/menu.dart';
 import 'package:grube/game/ui/screens/playing.dart';
 
-class GameUI extends StatelessWidget {
+class UI extends StatelessWidget {
   final GameManager gameManager;
 
-  GameUI(this.gameManager);
+  UI(this.gameManager);
 
   Widget menuScreen() {
     return MenuScreen(
@@ -24,24 +24,24 @@ class GameUI extends StatelessWidget {
   }
 
   Widget connectingScreen() {
-    return Positioned.fill(
-      child: Loading("CONNECTING"),
+    return const Positioned.fill(
+      child: const Loading("CONNECTING"),
     );
   }
 
   Widget reconnectingScreen() {
-    return Positioned.fill(
-      child: Loading("RECONNECTING"),
+    return const Positioned.fill(
+      child: const Loading("RECONNECTING"),
     );
   }
 
   Widget playingScreen() {
-    return PlayingScreen(TopUI());
+    return const PlayingScreen(const TopUI());
   }
 
   Widget gameOverScreen() {
     return GameOverScreen(
-      TopUI(),
+      const TopUI(),
       onRespawnPressed: () {
         gameManager.game.respawn();
       },

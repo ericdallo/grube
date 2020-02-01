@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class Loading extends StatelessWidget {
   final String text;
 
-  Loading(this.text);
+  const Loading(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +12,9 @@ class Loading extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(child: Center()),
-        Expanded(child: Center()),
-        Expanded(
+        const Expanded(child: Center()),
+        const Expanded(child: Center()),
+        const Expanded(
           child: SpinKitFadingCube(
             color: Colors.black,
             size: 50.0,
@@ -23,10 +23,10 @@ class Loading extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: 22),
+            style: const TextStyle(fontSize: 22),
           ),
         ),
-        Expanded(child: Center()),
+        const Expanded(child: Center()),
       ],
     );
   }

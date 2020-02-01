@@ -1,29 +1,30 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:grube/game/ui/state.dart';
+import 'package:grube/game/state.dart';
 
-class TopUI extends StatelessWidget{
+class TopUI extends StatelessWidget {
+  const TopUI();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Column(
         children: [
           Row(
             children: [
-              _Lifes(),
-              Expanded(child: Center()),
-              _Score(),
+              const _Lifes(),
+              const Expanded(child: Center()),
+              const _Score(),
             ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4, left: 4),
             child: Row(
               children: [
-                _Stamina(),
-                Expanded(child: Center()),
+                const _Stamina(),
+                const Expanded(child: Center()),
               ],
             ),
           )
@@ -31,10 +32,10 @@ class TopUI extends StatelessWidget{
       ),
     );
   }
-
 }
 
 class _Score extends StatelessWidget {
+  const _Score();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class _Score extends StatelessWidget {
 
     return Text(
       gameState.score.toStringAsFixed(0),
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 36,
         color: Colors.black,
       ),
@@ -51,6 +52,7 @@ class _Score extends StatelessWidget {
 }
 
 class _Lifes extends StatelessWidget {
+  const _Lifes();
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,8 @@ class _Lifes extends StatelessWidget {
 }
 
 class _Stamina extends StatelessWidget {
-
+  const _Stamina();
+ 
   @override
   Widget build(BuildContext context) {
     var gameState = GameStateProvider.of(context).gameState;
@@ -109,7 +112,7 @@ class _Stamina extends StatelessWidget {
             child: AnimatedContainer(
               color: Colors.white,
               width: gameState.stamina.width,
-              duration: Duration(milliseconds: gameState.stamina.time),
+              duration:  Duration(milliseconds: gameState.stamina.time),
               curve: Curves.linear,
             ),
           ),

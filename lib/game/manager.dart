@@ -1,28 +1,24 @@
 import 'package:flame/position.dart';
 import 'package:flame/util.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grube/config/secret.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
+import 'package:grube/game/state.dart';
 import 'package:grube/game/ui/screen.dart';
-import 'package:grube/game/ui/state.dart';
 import 'package:grube/game/ui/ui.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
 import 'package:grube/socket/manager.dart';
 
 class GameManager {
-  DoubleTapGestureRecognizer doubleTap;
-  HorizontalDragGestureRecognizer horizontal;
-  VerticalDragGestureRecognizer vertical;
   Util flameUtil;
 
   String playerId;
 
   GameStateProviderState stateProvider;
-  GameUI ui;
+  UI ui;
   Game game;
   SocketManager socketManager;
 
@@ -33,38 +29,23 @@ class GameManager {
   }
 
   GameManager._(BuildContext context) {
+    SecretManager.init();
     this.stateProvider = GameStateProvider.of(context);
-    this.game = Game(this);
-    this.ui = GameUI(this);
 
     init();
   }
 
   void init() async {
-    SecretManager.init();
     Audios.instance.loadAll();
-    doubleTap = DoubleTapGestureRecognizer();
-    horizontal = HorizontalDragGestureRecognizer();
-    vertical = VerticalDragGestureRecognizer();
+
+    this.game = Game(this);
+    this.ui = UI(this);
 
     flameUtil = Util();
     await flameUtil.fullScreen();
     await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
     this.socketManager = SocketManager(this);
-
-    doubleTap.onDoubleTap = game.onDoubleTap;
-    horizontal.onStart = game.onDragStart;
-    horizontal.onUpdate = game.onDragUpdate;
-    horizontal.onEnd = game.onDragEnd;
-
-    vertical.onStart = game.onDragStart;
-    vertical.onUpdate = game.onDragUpdate;
-    vertical.onEnd = game.onDragEnd;
-
-    flameUtil.addGestureRecognizer(horizontal);
-    flameUtil.addGestureRecognizer(vertical);
-    flameUtil.addGestureRecognizer(doubleTap);
   }
 
   void start() {
