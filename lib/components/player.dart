@@ -30,7 +30,7 @@ class Player extends Character {
     _dieAnimation.updateDimensions(position, size);
     _dieAnimation.update(t);
 
-    if (!_stamina.charging()) {
+    if (!_stamina.charging) {
       return;
     }
 
@@ -77,7 +77,7 @@ class Player extends Character {
   }
 
   void shoot() {
-    if (!live || _stamina.charging()) {
+    if (!live || _stamina.charging) {
       return;
     }
 
@@ -100,7 +100,7 @@ class Player extends Character {
     }
 
     _stamina.tire();
-    game.onPlayerShot(direction, bulletPosition, _stamina.refuelTime());
+    game.onPlayerShot(direction, bulletPosition, _stamina.refuelTime);
   }
 
   void hit() {
@@ -124,8 +124,8 @@ class _Stamina {
     this._refuelTime = stamina * 100;
   }
 
-  bool charging() => _charging;
-  int refuelTime() => _refuelTime;
+  bool get charging => _charging;
+  int get refuelTime => _refuelTime;
 
   void update(double t) {
     _timer += t * 1000;

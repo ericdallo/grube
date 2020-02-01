@@ -8,21 +8,29 @@ import 'package:flutter/material.dart';
 import 'package:grube/components/enemy.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/manager.dart';
-import 'package:grube/game/ui/ui.dart';
+import 'package:grube/game/ui/screen.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
 
 class Game extends BaseGame {
+
+  Game._();
+
+  static Game _instance;
+
+  static Game get instance {
+    return _instance ??= Game._();
+  }
+
   GameManager gameManager;
-  GameUI ui;
 
   Size screenSize;
 
   bool canMove;
   bool loaded = false;
 
-  Game(this.gameManager, this.ui) {
+  Game(this.gameManager) {
     initialize();
   }
 
@@ -64,10 +72,6 @@ class Game extends BaseGame {
     this.screenSize = size;
   }
 
-  void start() {
-    gameManager.start();
-  }
-
   void onDoubleTap() {
     if (!loaded) {
       return;
@@ -103,7 +107,7 @@ class Game extends BaseGame {
     Position position,
     int staminaTime,
   ) async {
-    ui.staminaTime(staminaTime);
+    gameManager.stateProvider.staminaTime(staminaTime);
     Flame.audio.play(Audios.shoot);
     this.gameManager.socketManager.send("player-shoot", {
       'direction': Enums.parse(direction),
@@ -113,13 +117,13 @@ class Game extends BaseGame {
   }
 
   void staminaCharged() async {
-    ui.staminaCharged();
+    gameManager.stateProvider.staminaCharged();
   }
 
   void load(player, world) {
     World.instance.load(this, player, world);
     this.loaded = true;
-    ui.changeScreen(UIScreen.playing);
+    gameManager.stateProvider.changeScreen(UIScreen.playing);
   }
 
   void unload() {
@@ -158,7 +162,7 @@ class Game extends BaseGame {
 
   void playerScore(int score, String crownedPlayerId) async {
     Flame.audio.play(Audios.score);
-    ui.score(score);
+    gameManager.stateProvider.score(score);
     World.instance.updateCrownedPlayer(crownedPlayerId);
   }
 
@@ -169,13 +173,13 @@ class Game extends BaseGame {
 
   void playerHurted() async {
     var world = World.instance;
-    ui.life(world.player.life);
+    gameManager.stateProvider.life(world.player.life);
 
     if (world.player.live) {
       Flame.audio.play(Audios.hurt);
     } else {
       Flame.audio.play(Audios.gameOver);
-      ui.changeScreen(UIScreen.gameOver);
+      gameManager.stateProvider.changeScreen(UIScreen.gameOver);
     }
   }
 
@@ -187,8 +191,8 @@ class Game extends BaseGame {
     var world = World.instance;
     world.player.life = life;
     world.player.position = position;
-    ui.life(life);
-    ui.changeScreen(UIScreen.playing);
+    gameManager.stateProvider.life(life);
+    gameManager.stateProvider.changeScreen(UIScreen.playing);
   }
 
   void enemyRespawned(String enemyId, int life, Position position) async {

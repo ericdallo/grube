@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
-import 'package:grube/game/ui/ui.dart';
+import 'package:grube/game/ui/screen.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
@@ -51,7 +51,7 @@ class SocketManager {
       handleMsg,
       onError: handleError,
       onDone: () async {
-        if (gameManager.gameUI.state.currentScreen == UIScreen.playing) {
+        if (gameManager.stateProvider.currentScreen() == UIScreen.playing) {
           reconnect();
         }
       },
@@ -59,7 +59,7 @@ class SocketManager {
   }
 
   void reconnect() async {
-    gameManager.gameUI.changeScreen(UIScreen.reconnecting);
+    gameManager.stateProvider.changeScreen(UIScreen.reconnecting);
     if (!tryConnect) {
       return;
     }
@@ -67,12 +67,12 @@ class SocketManager {
     this.channel = IOWebSocketChannel.connect(url);
     channel.stream.listen(
       (message) {
-        gameManager.gameUI.changeScreen(UIScreen.playing);
+        gameManager.stateProvider.changeScreen(UIScreen.playing);
         handleMsg(message);
       },
       onError: handleError,
       onDone: () async {
-        if (gameManager.gameUI.state.currentScreen == UIScreen.playing) {
+        if (gameManager.stateProvider.currentScreen() == UIScreen.playing) {
           await Future.delayed(Duration(seconds: 1));
           reconnect();
         }

@@ -1,10 +1,13 @@
 import 'package:flame/position.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grube/config/secret.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
+import 'package:grube/game/ui/screen.dart';
+import 'package:grube/game/ui/state.dart';
 import 'package:grube/game/ui/ui.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
@@ -18,15 +21,21 @@ class GameManager {
 
   String playerId;
 
-  GameUI gameUI;
+  GameStateProviderState stateProvider;
+  GameUI ui;
   Game game;
   SocketManager socketManager;
 
-  GameManager() {
-    this.gameUI = GameUI();
-    this.game = Game(this, gameUI);
+  static GameManager _instance;
 
-    gameUI.state.game = game;
+  static GameManager instance(BuildContext context) {
+    return _instance ??= GameManager._(context);
+  }
+
+  GameManager._(BuildContext context) {
+    this.stateProvider = GameStateProvider.of(context);
+    this.game = Game(this);
+    this.ui = GameUI(this);
 
     init();
   }
@@ -150,11 +159,11 @@ class GameManager {
   }
 
   Future<bool> onBackPressed() async {
-    var screen = gameUI.state.currentScreen;
+    UIScreen screen = stateProvider.currentScreen();
     if (screen == UIScreen.playing ||
         screen == UIScreen.connecting ||
         screen == UIScreen.menu) {
-      gameUI.changeScreen(UIScreen.menu);
+      stateProvider.changeScreen(UIScreen.menu);
       stop();
       return false;
     }
