@@ -57,6 +57,14 @@ class GameManager {
     this.socketManager.disconnect();
   }
 
+  void pause() async {
+    this.socketManager.send("player-paused", {});
+  }
+
+  void resume() async {
+    this.socketManager.send("player-resumed", {});
+  }
+
   void handleMessage(List<dynamic> json) async {
     if (json[0] == "chsk/handshake") {
       playerId = json.last[0];
@@ -83,6 +91,12 @@ class GameManager {
           break;
         case "game/player-removed":
           game.removeEnemy(payload['player-id']);
+          break;
+        case "game/enemy-paused":
+        game.pauseEnemy(payload['enemy-id']);
+          break;
+        case "game/enemy-resumed":
+        game.resumeEnemy(payload['enemy-id']);
           break;
         case "game/player-moved":
           var player = payload['player'];

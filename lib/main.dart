@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grube/app_state_manager.dart';
 import 'package:grube/game/manager.dart';
 import 'package:grube/game/state.dart';
 
@@ -28,22 +29,7 @@ class App extends StatelessWidget {
         onVerticalDragStart: gameManager.game.onDragStart,
         onVerticalDragUpdate: gameManager.game.onDragUpdate,
         onVerticalDragEnd: gameManager.game.onDragEnd,
-        child: WillPopScope(
-          child: Scaffold(
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
-                Positioned.fill(
-                  child: gameManager.game.widget,
-                ),
-                Positioned.fill(
-                  child: gameManager.ui,
-                )
-              ],
-            ),
-          ),
-          onWillPop: gameManager.onBackPressed,
-        ),
+        child: AppStateManager(),
       ),
     );
   }

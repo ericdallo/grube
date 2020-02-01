@@ -14,7 +14,6 @@ import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
 
 class Game extends BaseGame {
-
   Game._();
 
   static Game _instance;
@@ -132,33 +131,26 @@ class Game extends BaseGame {
     World.instance.unload();
   }
 
-  void addEnemy(enemy) {
-    World.instance.addEnemy(Enemy.from(this, enemy));
-  }
+  void addEnemy(enemy) => World.instance.addEnemy(Enemy.from(this, enemy));
 
-  void removeEnemy(String playerId) {
-    World.instance.removeEnemy(playerId);
-  }
+  void removeEnemy(String playerId) => World.instance.removeEnemy(playerId);
 
-  void moveEnemy(String enemyId, Position position, Direction direction) {
-    World.instance.moveEnemy(enemyId, position, direction);
-  }
+  void pauseEnemy(String enemyId) => World.instance.pauseEnemy(enemyId);
 
-  void playerShot(bullets) {
-    World.instance.playerShot(bullets);
-  }
+  void resumeEnemy(String enemyId) => World.instance.resumeEnemy(enemyId);
 
-  void enemyShot(String enemyId, bullets) {
-    World.instance.enemyShot(enemyId, bullets);
-  }
+  void moveEnemy(String enemyId, Position position, Direction direction) =>
+      World.instance.moveEnemy(enemyId, position, direction);
 
-  void moveBullets(bullets) {
-    World.instance.moveBullets(bullets);
-  }
+  void playerShot(bullets) => World.instance.playerShot(bullets);
 
-  void hitPlayers(List<String> playerIds) {
-    World.instance.hitPlayers(playerIds);
-  }
+  void enemyShot(String enemyId, bullets) =>
+      World.instance.enemyShot(enemyId, bullets);
+
+  void moveBullets(bullets) => World.instance.moveBullets(bullets);
+
+  void hitPlayers(List<String> playerIds) =>
+      World.instance.hitPlayers(playerIds);
 
   void playerScore(int score, String crownedPlayerId) async {
     Flame.audio.play(Audios.score);

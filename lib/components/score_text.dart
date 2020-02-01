@@ -4,21 +4,24 @@ import 'package:flame/palette.dart';
 import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
+import 'package:grube/game/game.dart';
 
-final TextConfig regularText = TextConfig(
+const TextConfig regularText = TextConfig(
   fontFamily: 'PressStart2P',
-  color: BasicPalette.black.color,
+  color: Colors.black,
   fontSize: 18,
 );
 
 class ScoreText extends TextComponent {
   Size size;
 
-  ScoreText(int score, this.size)
+  ScoreText(Game game, int score, this.size)
       : super(
           score.toString(),
           config: regularText,
-        );
+        ) {
+    game.add(this);
+  }
 
   @override
   bool isHud() {

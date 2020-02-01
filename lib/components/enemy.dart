@@ -4,12 +4,14 @@ import 'package:grube/components/animation/die.dart';
 import 'package:grube/components/animation/hurt.dart';
 import 'package:grube/components/character.dart';
 import 'package:grube/components/score_text.dart';
+import 'package:grube/components/pause_text.dart';
 import 'package:grube/game/game.dart';
 
 class Enemy extends Character {
   HurtAnimation _hurtAnimation;
   DieAnimation _dieAnimation;
   ScoreText _scoreText;
+  PauseText _pauseText;
 
   Enemy.from(
     Game game,
@@ -21,8 +23,8 @@ class Enemy extends Character {
         ) {
     this._hurtAnimation = HurtAnimation(game);
     this._dieAnimation = DieAnimation(game, this);
-    this._scoreText = ScoreText(this.score, this.size);
-    this.game.add(_scoreText);
+    this._scoreText = ScoreText(game, this.score, this.size);
+    this._pauseText = PauseText(game, this.size);
   }
 
   @override
@@ -31,6 +33,8 @@ class Enemy extends Character {
     _dieAnimation.updateDimensions(position, size);
     _hurtAnimation.updateDimensions(position, size);
     _scoreText.updateDimensions(position);
+    _pauseText.updateDimensions(position);
+
     _scoreText.updateScore(score);
 
     _hurtAnimation.update(t);
@@ -45,6 +49,7 @@ class Enemy extends Character {
     _dieAnimation.render(c);
     if (live) {
       _scoreText.render(c);
+      _pauseText.render(c);
     }
   }
 
@@ -57,4 +62,8 @@ class Enemy extends Character {
       _dieAnimation.play();
     }
   }
+
+  void pause() => _pauseText.pause();
+
+  void resume() => _pauseText.resume();
 }

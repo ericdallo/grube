@@ -41,6 +41,14 @@ class World {
     this.enemies.removeWhere((e) => e.id == enemyId);
   }
 
+  void pauseEnemy(String enemyId) {
+    this.enemies.where((e) => e.id == enemyId).forEach((e) => e.pause());
+  }
+
+  void resumeEnemy(String enemyId) {
+    this.enemies.where((e) => e.id == enemyId).forEach((e) => e.resume());
+  }
+
   void moveEnemy(String enemyId, Position position, Direction direction) {
     this.enemies.where((enemy) => enemy.id == enemyId).forEach((enemy) {
       enemy.position = position;
