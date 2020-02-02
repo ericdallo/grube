@@ -22,5 +22,9 @@ class Message {
 }
 
 abstract class EventData {
-  EventData fromJson(Map<String, dynamic> json);
+  EventData fromJson(Map<String, dynamic> json) {
+    return from(json);
+  }
+
+  EventData from(json);
 }
