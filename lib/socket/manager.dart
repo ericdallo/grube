@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
+import 'package:grube/game/event_handler.dart';
 import 'package:grube/game/ui/screen.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -12,14 +13,15 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 final logger = Logger();
 
 class SocketManager {
-  GameManager gameManager;
+  final GameManager gameManager;
+  final EventHandler eventHandler;
   String url;
 
   WebSocketChannel channel;
   String playerId;
   bool tryConnect = true;
 
-  SocketManager(this.gameManager) {
+  SocketManager(this.gameManager) : this.eventHandler = EventHandler(gameManager) {
     initialize();
   }
 
@@ -33,7 +35,7 @@ class SocketManager {
     if (json is String) {
       return;
     }
-    gameManager.handleMessage(json);
+    eventHandler.handle(json);
   }
 
   void handleError(error, StackTrace stackTrace) async {
