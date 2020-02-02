@@ -6,21 +6,22 @@ import 'package:grube/components/character.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
+import 'package:grube/socket/event/data.dart';
 
 class Player extends Character {
   HurtAnimation _hurtAnimation;
   DieAnimation _dieAnimation;
   _Stamina _stamina;
 
-  Player.from(Game game, Map<String, dynamic> json)
+  Player.from(Game game, CharacterData playerData)
       : super(
           game,
-          json: json,
-          color: Color(json['color']),
+          data: playerData,
+          color: Color(playerData.color),
         ) {
     this._hurtAnimation = HurtAnimation(game);
     this._dieAnimation = DieAnimation(game, this);
-    this._stamina = _Stamina(game, json['stamina']);
+    this._stamina = _Stamina(game, playerData.stamina);
   }
 
   @override

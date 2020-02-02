@@ -16,6 +16,7 @@ dependencies:
   web_socket_channel: ^1.1.0
   flutter_spinkit: ^2.1.0
   logger: ^0.8.3
+  json_annotation: ^3.0.1
 
 dev_dependencies:
 
@@ -23,6 +24,8 @@ dev_dependencies:
     sdk: flutter
    
   flutter_launcher_icons: ^0.7.3
+  build_runner: ^1.7.3
+  json_serializable: ^3.2.5
 
 flutter_icons:
   android: "launcher_icon"

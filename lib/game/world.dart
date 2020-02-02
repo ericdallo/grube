@@ -4,6 +4,7 @@ import 'package:grube/components/enemy.dart';
 import 'package:grube/components/player.dart';
 import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
+import 'package:grube/socket/event/data.dart';
 
 class World {
   World._();
@@ -18,13 +19,12 @@ class World {
   Player player;
   List<Enemy> enemies = [];
 
-  void load(Game game, player, world) {
-    this.size = Size(world['size']['width'], world['size']['height']);
+  void load(Game game, CharacterData player, WorldData world) {
+    this.size = Size(world.size.width, world.size.height);
     this.player = Player.from(game, player);
-    this.enemies =
-        List.of(world['players']..removeWhere((p) => p['id'] == player['id']))
-            .map((enemy) => Enemy.from(game, enemy))
-            .toList();
+    this.enemies = List.of(world.players..removeWhere((p) => p.id == player.id))
+        .map((enemy) => Enemy.from(game, enemy))
+        .toList();
   }
 
   void unload() {
@@ -56,18 +56,18 @@ class World {
     });
   }
 
-  void playerShot(List<dynamic> bullets) {
+  void playerShot(List<BulletData> bullets) {
     player.moveBullets(bullets);
   }
 
-  void enemyShot(String enemyId, List<dynamic> bullets) {
+  void enemyShot(String enemyId, List<BulletData> bullets) {
     this
         .enemies
         .where((enemy) => enemy.id == enemyId)
         .forEach((enemy) => enemy.moveBullets(bullets));
   }
 
-  void moveBullets(Map<String, dynamic> bulletsByPlayer) {
+  void moveBullets(Map<String, List<BulletData>> bulletsByPlayer) {
     bulletsByPlayer.forEach((playerId, bullets) {
       if (playerId == player.id) {
         player.moveBullets(bullets);
@@ -93,12 +93,12 @@ class World {
     });
   }
 
-  void enemiesScored(enemies) {
+  void enemiesScored(List<CharacterData> enemies) {
     enemies.forEach((enemyScored) {
       Enemy enemy =
-          this.enemies.singleWhere((enemy) => enemy.id == enemyScored['id']);
+          this.enemies.singleWhere((enemy) => enemy.id == enemyScored.id);
 
-      enemy.score = enemyScored['score'];
+      enemy.score = enemyScored.score;
     });
   }
 

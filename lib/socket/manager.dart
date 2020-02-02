@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:grube/config/secret.dart';
 import 'package:grube/game/manager.dart';
-import 'package:grube/game/event_handler.dart';
 import 'package:grube/game/ui/screen.dart';
+import 'package:grube/socket/event/handler.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
@@ -21,7 +21,8 @@ class SocketManager {
   String playerId;
   bool tryConnect = true;
 
-  SocketManager(this.gameManager) : this.eventHandler = EventHandler(gameManager) {
+  SocketManager(this.gameManager)
+      : this.eventHandler = EventHandler(gameManager) {
     initialize();
   }
 

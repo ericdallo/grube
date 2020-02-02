@@ -32,7 +32,7 @@ class GameOverScreen extends StatelessWidget {
 
 class _Title extends StatelessWidget {
   const _Title();
- 
+
   @override
   Widget build(BuildContext context) {
     return const Text(

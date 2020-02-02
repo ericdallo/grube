@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:grube/components/animation/die.dart';
 import 'package:grube/components/animation/hurt.dart';
 import 'package:grube/components/character.dart';
-import 'package:grube/components/score_text.dart';
 import 'package:grube/components/pause_text.dart';
+import 'package:grube/components/score_text.dart';
 import 'package:grube/game/game.dart';
+import 'package:grube/socket/event/data.dart';
 
 class Enemy extends Character {
   HurtAnimation _hurtAnimation;
@@ -15,10 +16,10 @@ class Enemy extends Character {
 
   Enemy.from(
     Game game,
-    Map<String, dynamic> json,
+    CharacterData data,
   ) : super(
           game,
-          json: json,
+          data: data,
           color: Color(0xFF999999),
         ) {
     this._hurtAnimation = HurtAnimation(game);
