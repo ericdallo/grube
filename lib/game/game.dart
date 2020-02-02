@@ -132,7 +132,8 @@ class Game extends BaseGame {
     World.instance.unload();
   }
 
-  void addEnemy(enemy) => World.instance.addEnemy(Enemy.from(this, enemy));
+  void addEnemy(CharacterData enemy) =>
+      World.instance.addEnemy(Enemy.from(this, enemy));
 
   void removeEnemy(String playerId) => World.instance.removeEnemy(playerId);
 
@@ -145,10 +146,11 @@ class Game extends BaseGame {
 
   void playerShot(bullets) => World.instance.playerShot(bullets);
 
-  void enemyShot(String enemyId, bullets) =>
+  void enemyShot(String enemyId, List<BulletData> bullets) =>
       World.instance.enemyShot(enemyId, bullets);
 
-  void moveBullets(bullets) => World.instance.moveBullets(bullets);
+  void moveBullets(bulletsByPlayer) =>
+      World.instance.moveBullets(bulletsByPlayer);
 
   void hitPlayers(List<String> playerIds) =>
       World.instance.hitPlayers(playerIds);
@@ -159,7 +161,8 @@ class Game extends BaseGame {
     World.instance.updateCrownedPlayer(crownedPlayerId);
   }
 
-  void enemiesScored(enemies, String crownedPlayerId) async {
+  void enemiesScored(
+      List<CharacterData> enemies, String crownedPlayerId) async {
     World.instance.enemiesScored(enemies);
     World.instance.updateCrownedPlayer(crownedPlayerId);
   }

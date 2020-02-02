@@ -81,8 +81,8 @@ abstract class Character extends PositionComponent {
     _crown.render(c);
   }
 
-  void moveBullets(List<dynamic> bulletsJson) {
-    this.bullets = bulletsJson
+  void moveBullets(List<BulletData> bullets) {
+    this.bullets = bullets
         .map((bullet) => Bullet.from(
               game,
               size.width,

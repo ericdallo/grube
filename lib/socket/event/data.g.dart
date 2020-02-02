@@ -24,19 +24,6 @@ CharacterData _$CharacterDataFromJson(Map<String, dynamic> json) {
         ?.toList();
 }
 
-Map<String, dynamic> _$CharacterDataToJson(CharacterData instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'position': instance.position,
-      'direction': _$DirectionEnumMap[instance.direction],
-      'color': instance.color,
-      'life': instance.life,
-      'stamina': instance.stamina,
-      'score': instance.score,
-      'step': instance.step,
-      'bullets': instance.bullets,
-    };
-
 T _$enumDecode<T>(
   Map<T, dynamic> enumValues,
   dynamic source, {
@@ -88,21 +75,11 @@ WorldData _$WorldDataFromJson(Map<String, dynamic> json) {
         ?.toList();
 }
 
-Map<String, dynamic> _$WorldDataToJson(WorldData instance) => <String, dynamic>{
-      'size': instance.size,
-      'players': instance.players,
-    };
-
 SizeData _$SizeDataFromJson(Map<String, dynamic> json) {
   return SizeData()
     ..width = (json['width'] as num)?.toDouble()
     ..height = (json['height'] as num)?.toDouble();
 }
-
-Map<String, dynamic> _$SizeDataToJson(SizeData instance) => <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
-    };
 
 BulletData _$BulletDataFromJson(Map<String, dynamic> json) {
   return BulletData()
@@ -112,20 +89,8 @@ BulletData _$BulletDataFromJson(Map<String, dynamic> json) {
     ..direction = _$enumDecodeNullable(_$DirectionEnumMap, json['direction']);
 }
 
-Map<String, dynamic> _$BulletDataToJson(BulletData instance) =>
-    <String, dynamic>{
-      'position': instance.position,
-      'direction': _$DirectionEnumMap[instance.direction],
-    };
-
 PositionData _$PositionDataFromJson(Map<String, dynamic> json) {
   return PositionData()
     ..x = (json['x'] as num)?.toDouble()
     ..y = (json['y'] as num)?.toDouble();
 }
-
-Map<String, dynamic> _$PositionDataToJson(PositionData instance) =>
-    <String, dynamic>{
-      'x': instance.x,
-      'y': instance.y,
-    };

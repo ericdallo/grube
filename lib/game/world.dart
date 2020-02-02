@@ -56,18 +56,18 @@ class World {
     });
   }
 
-  void playerShot(List<dynamic> bullets) {
+  void playerShot(List<BulletData> bullets) {
     player.moveBullets(bullets);
   }
 
-  void enemyShot(String enemyId, List<dynamic> bullets) {
+  void enemyShot(String enemyId, List<BulletData> bullets) {
     this
         .enemies
         .where((enemy) => enemy.id == enemyId)
         .forEach((enemy) => enemy.moveBullets(bullets));
   }
 
-  void moveBullets(Map<String, dynamic> bulletsByPlayer) {
+  void moveBullets(Map<String, List<BulletData>> bulletsByPlayer) {
     bulletsByPlayer.forEach((playerId, bullets) {
       if (playerId == player.id) {
         player.moveBullets(bullets);
@@ -93,12 +93,12 @@ class World {
     });
   }
 
-  void enemiesScored(enemies) {
+  void enemiesScored(List<CharacterData> enemies) {
     enemies.forEach((enemyScored) {
       Enemy enemy =
-          this.enemies.singleWhere((enemy) => enemy.id == enemyScored['id']);
+          this.enemies.singleWhere((enemy) => enemy.id == enemyScored.id);
 
-      enemy.score = enemyScored['score'];
+      enemy.score = enemyScored.score;
     });
   }
 

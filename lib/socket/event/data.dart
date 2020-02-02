@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'data.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class CharacterData {
   String id;
   PositionData position;
@@ -23,7 +23,7 @@ class CharacterData {
       _$CharacterDataFromJson(json);
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class WorldData {
   SizeData size;
   List<CharacterData> players;
@@ -34,7 +34,7 @@ class WorldData {
       _$WorldDataFromJson(json);
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class SizeData {
   double width;
   double height;
@@ -45,7 +45,7 @@ class SizeData {
       _$SizeDataFromJson(json);
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class BulletData {
   PositionData position;
   Direction direction;
@@ -56,7 +56,7 @@ class BulletData {
       _$BulletDataFromJson(json);
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PositionData {
   double x;
   double y;
