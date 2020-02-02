@@ -9,7 +9,7 @@ class PlayerAddedEvent extends EventData {
   CharacterData player;
   WorldData world;
 
-  PlayerAddedEvent from(json) => _$PlayerAddedEventFromJson(json);
+  from(json) => _$PlayerAddedEventFromJson(json);
 }
 
 @JsonSerializable(createToJson: false)

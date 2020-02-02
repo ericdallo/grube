@@ -11,7 +11,6 @@ import 'package:grube/game/manager.dart';
 import 'package:grube/game/ui/screen.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
-import 'package:grube/helpers/enums.dart';
 import 'package:grube/socket/event/data.dart';
 
 class Game extends BaseGame {
@@ -94,31 +93,13 @@ class Game extends BaseGame {
     this.canMove = true;
   }
 
-  void playerMoved(Direction direction, Position position) async {
-    this.gameManager.socketManager.send("move-player", {
-      'direction': Enums.parse(direction),
-      'x': position.x,
-      'y': position.y
-    });
-  }
+  void movePlayer(Direction direction, Position position) =>
+      this.gameManager.movePlayer(direction, position);
 
-  void onPlayerShot(
-    Direction direction,
-    Position position,
-    int staminaTime,
-  ) async {
-    gameManager.stateProvider.staminaTime(staminaTime);
-    Flame.audio.play(Audios.shoot);
-    this.gameManager.socketManager.send("player-shoot", {
-      'direction': Enums.parse(direction),
-      'x': position.x,
-      'y': position.y,
-    });
-  }
+  void playerShoot(Direction direction, Position position, int staminaTime) =>
+      this.gameManager.playerShoot(direction, position, staminaTime);
 
-  void staminaCharged() async {
-    gameManager.stateProvider.staminaCharged();
-  }
+  void staminaCharged() => gameManager.stateProvider.staminaCharged();
 
   void load(CharacterData player, WorldData world) {
     World.instance.load(this, player, world);
@@ -177,10 +158,6 @@ class Game extends BaseGame {
       Flame.audio.play(Audios.gameOver);
       gameManager.stateProvider.changeScreen(UIScreen.gameOver);
     }
-  }
-
-  void respawn() async {
-    this.gameManager.socketManager.send("player-respawn", {});
   }
 
   void playerRespawned(int life, Position position) async {
