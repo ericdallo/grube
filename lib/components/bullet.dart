@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/position.dart';
 import 'package:grube/direction.dart';
-import 'package:grube/helpers/enums.dart';
 import 'package:grube/game/game.dart';
+import 'package:grube/socket/event/data.dart';
 
 const double SMALL_SIZE = 8;
 const double BIG_SIZE = 16;
@@ -20,10 +20,10 @@ class Bullet {
     double playerWidth,
     double playerHeight,
     Color color,
-    Map<String, dynamic> json,
+    BulletData data,
   ) {
-    this.direction = Enums.fromString(Direction.values, json['direction']);
-    this.position = Position(json['position']['x'], json['position']['y']);
+    this.direction = data.direction;
+    this.position = Position(data.position.x, data.position.y);
 
     this._paint = Paint()..color = color;
 

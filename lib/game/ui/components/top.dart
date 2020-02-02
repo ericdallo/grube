@@ -89,7 +89,7 @@ class _Lifes extends StatelessWidget {
 
 class _Stamina extends StatelessWidget {
   const _Stamina();
- 
+
   @override
   Widget build(BuildContext context) {
     var gameState = GameStateProvider.of(context).gameState;
@@ -112,7 +112,7 @@ class _Stamina extends StatelessWidget {
             child: AnimatedContainer(
               color: Colors.white,
               width: gameState.stamina.width,
-              duration:  Duration(milliseconds: gameState.stamina.time),
+              duration: Duration(milliseconds: gameState.stamina.time),
               curve: Curves.linear,
             ),
           ),

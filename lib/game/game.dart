@@ -12,6 +12,7 @@ import 'package:grube/game/ui/screen.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/audios.dart';
 import 'package:grube/helpers/enums.dart';
+import 'package:grube/socket/event/data.dart';
 
 class Game extends BaseGame {
   Game._();
@@ -119,7 +120,7 @@ class Game extends BaseGame {
     gameManager.stateProvider.staminaCharged();
   }
 
-  void load(player, world) {
+  void load(CharacterData player, WorldData world) {
     World.instance.load(this, player, world);
     this.loaded = true;
     gameManager.stateProvider.changeScreen(UIScreen.playing);

@@ -18,5 +18,4 @@ class Audios {
   void loadAll() async {
     await Flame.audio.loadAll([click, hurt, gameOver, score, shoot]);
   }
-
 }

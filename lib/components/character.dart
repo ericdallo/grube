@@ -7,6 +7,7 @@ import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/world.dart';
 import 'package:grube/helpers/enums.dart';
+import 'package:grube/socket/event/data.dart';
 
 abstract class Character extends PositionComponent {
   final Game game;
@@ -28,25 +29,25 @@ abstract class Character extends PositionComponent {
 
   Character(
     this.game, {
-    @required Map<String, dynamic> json,
+    @required CharacterData data,
     @required Color color,
   }) {
     final width = game.screenSize.width / World.instance.size.width;
     final height = game.screenSize.height / World.instance.size.height;
 
-    this.id = json['id'];
-    this.bullets = json['bullets']
+    this.id = data.id;
+    this.bullets = data.bullets
         .map((bullet) => Bullet.from(game, width, height, color, bullet))
         .toList()
         .cast<Bullet>();
-    this.position = Position(json['position']['x'], json['position']['y']);
-    this.direction = Enums.fromString(Direction.values, json['direction']);
-    this.life = json['life'];
-    this.score = json['score'];
+    this.position = Position(data.position.x, data.position.y);
+    this.direction = data.direction;
+    this.life = data.life;
+    this.score = data.score;
 
     this.size = Size(width, height);
-    this.xStep = json['step'] * width;
-    this.yStep = json['step'] * height;
+    this.xStep = data.step * width;
+    this.yStep = data.step * height;
     this.paint = Paint()..color = color;
 
     this.width = size.width;
