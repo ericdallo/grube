@@ -43,7 +43,7 @@ class UI extends StatelessWidget {
     return GameOverScreen(
       const TopUI(),
       onRespawnPressed: () {
-        gameManager.game.respawn();
+        gameManager.respawn();
       },
     );
   }

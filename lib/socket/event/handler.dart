@@ -1,10 +1,8 @@
 import 'package:flame/position.dart';
-import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/manager.dart';
-import 'package:grube/helpers/enums.dart';
-import 'package:grube/socket/event/messages.dart';
 import 'package:grube/socket/event/events.dart';
+import 'package:grube/socket/event/messages.dart';
 
 class EventHandler {
   final Game game;

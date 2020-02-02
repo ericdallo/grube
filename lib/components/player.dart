@@ -74,7 +74,7 @@ class Player extends Character {
     }
 
     this.direction = direction;
-    game.playerMoved(direction, position);
+    game.movePlayer(direction, position);
   }
 
   void shoot() {
@@ -101,7 +101,7 @@ class Player extends Character {
     }
 
     _stamina.tire();
-    game.onPlayerShot(direction, bulletPosition, _stamina.refuelTime);
+    game.playerShoot(direction, bulletPosition, _stamina.refuelTime);
   }
 
   void hit() {

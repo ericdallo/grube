@@ -1,12 +1,16 @@
+import 'package:flame/flame.dart';
+import 'package:flame/position.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grube/config/secret.dart';
+import 'package:grube/direction.dart';
 import 'package:grube/game/game.dart';
 import 'package:grube/game/state.dart';
 import 'package:grube/game/ui/screen.dart';
 import 'package:grube/game/ui/ui.dart';
 import 'package:grube/helpers/audios.dart';
+import 'package:grube/helpers/enums.dart';
 import 'package:grube/socket/manager.dart';
 
 class GameManager {
@@ -60,6 +64,32 @@ class GameManager {
 
   void resume() async {
     this.socketManager.send("player-resumed", {});
+  }
+
+  void respawn() async {
+    this.socketManager.send("player-respawn", {});
+  }
+
+  void movePlayer(Direction direction, Position position) async {
+    this.socketManager.send("move-player", {
+      'direction': Enums.parse(direction),
+      'x': position.x,
+      'y': position.y
+    });
+  }
+
+  void playerShoot(
+    Direction direction,
+    Position position,
+    int staminaTime,
+  ) async {
+    this.stateProvider.staminaTime(staminaTime);
+    Flame.audio.play(Audios.shoot);
+    this.socketManager.send("player-shoot", {
+      'direction': Enums.parse(direction),
+      'x': position.x,
+      'y': position.y,
+    });
   }
 
   Future<bool> onBackPressed() async {
