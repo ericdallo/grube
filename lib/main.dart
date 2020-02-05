@@ -7,12 +7,19 @@ import 'package:grube/game/state.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(GameStateProvider(
-    child: App(),
-  ));
+  runApp(App());
 }
 
 class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GameStateProvider(
+      child: _GameApp(),
+    );
+  }
+}
+
+class _GameApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GameManager gameManager = GameManager.instance(context);
